@@ -20,9 +20,9 @@ interface State {
 }
 
 interface Actions {
-  addNode: (node : Node) => void;
+  addNode: (node: Node) => void;
   addEdge: () => void;
-	setAction: (action: State["action"]) => void;
+  setAction: (action: State["action"]) => void;
 }
 
 export type GraphStore = State & Actions;
@@ -32,11 +32,11 @@ export const useGraphStore = create<GraphStore>((set) => ({
   edges: [],
   action: "view",
   addEdge: () => {},
-  addNode: (node : Node) => {
-		set({ nodes: [...useGraphStore.getState().nodes, node] });
-		console.log("Added node", node);
-	},
-	setAction: (action: State["action"]) => {
-		set({ action: action });
-	}
+  addNode: (node: Node) => {
+    set({ nodes: [...useGraphStore.getState().nodes, node] });
+    console.log("Added node", node);
+  },
+  setAction: (action: State["action"]) => {
+    set({ action: action });
+  },
 }));
