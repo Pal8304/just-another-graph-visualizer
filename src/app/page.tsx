@@ -1,5 +1,5 @@
-import GraphCanvas from "@/components/graph/graph-canvas";
-import GraphButtons from "@/components/graph/graph-buttons";
+import {GraphCanvas} from "@/components/graph/graph-canvas";
+import {GraphButtons} from "@/components/graph/graph-buttons";
 
 export default function Home() {
   return (
