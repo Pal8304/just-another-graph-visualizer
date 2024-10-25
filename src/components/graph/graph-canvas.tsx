@@ -15,15 +15,15 @@ export function GraphCanvas() {
         className="w-full h-full z-10 absolute"
         onClick={() => {
           if (action === "add-node") {
-            addNode({ id: "A", x: x, y: y });
+            addNode({ id: crypto.randomUUID(), nodeLabel: "A", x, y });
           }
         }}
       ></div>
-      <div className="w-full h-full z-0 absolute">
+      <>
         {useGraphStore().nodes.map((node) => (
-          <Node key={crypto.randomUUID()} {...node} />
+          <Node key={node.id} {...node} />
         ))}
-      </div>
+      </>
     </div>
   );
 }
