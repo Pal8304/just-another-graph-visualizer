@@ -87,7 +87,7 @@ export const useGraphStore = create<GraphStore, [["zustand/persist", unknown]]>(
           edges: useGraphStore
             .getState()
             .edges.filter(
-              (edge) => edge.from.id !== node.id && edge.to.id !== node.id
+              (edge) => edge.from.id !== node.id && edge.to.id !== node.id,
             ),
         });
         console.log("Removed node", node);
@@ -116,6 +116,6 @@ export const useGraphStore = create<GraphStore, [["zustand/persist", unknown]]>(
     }),
     {
       name: "graph-store",
-    }
-  )
+    },
+  ),
 );

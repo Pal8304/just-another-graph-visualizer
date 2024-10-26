@@ -39,17 +39,18 @@ export function GraphCanvas() {
         {edges.map((edge, index) => (
           <g key={index}>
             <line
-              x1 = {edge.from.x}
-              y1 = {edge.from.y}
-              x2 = {edge.to.x}
-              y2 = {edge.to.y}
+              x1={edge.from.x}
+              y1={edge.from.y}
+              x2={edge.to.x}
+              y2={edge.to.y}
               className="stroke-current"
             />
-            <text className="text-lg fill-current"
-              x = {(edge.from.x + edge.to.x) / 2}
-              y = {(edge.from.y + edge.to.y) / 2}
-              dx = {0}
-              dy = {0}
+            <text
+              className="text-lg fill-current"
+              x={(edge.from.x + edge.to.x) / 2}
+              y={(edge.from.y + edge.to.y) / 2}
+              dx={0}
+              dy={0}
               textAnchor="middle"
             >
               {edge.weight}
