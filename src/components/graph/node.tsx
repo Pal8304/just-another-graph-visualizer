@@ -45,6 +45,9 @@ export function Node({
           setSelectedNode({ id, nodeLabel, x, y });
         }
       }}
+      onDoubleClick={() => {
+        // function to change the node label
+      }}
     >
       {nodeLabel}
     </div>

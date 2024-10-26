@@ -37,15 +37,24 @@ export function GraphCanvas() {
       ></div>
       <svg className="w-full h-full absolute">
         {edges.map((edge, index) => (
-          <line
-            key={index}
-            x1={edge.from.x}
-            y1={edge.from.y}
-            x2={edge.to.x}
-            y2={edge.to.y}
-            stroke="black"
-            strokeWidth="2"
-          />
+          <g key={index}>
+            <line
+              x1 = {edge.from.x}
+              y1 = {edge.from.y}
+              x2 = {edge.to.x}
+              y2 = {edge.to.y}
+              className="stroke-current"
+            />
+            <text className="text-lg fill-current"
+              x = {(edge.from.x + edge.to.x) / 2}
+              y = {(edge.from.y + edge.to.y) / 2}
+              dx = {0}
+              dy = {0}
+              textAnchor="middle"
+            >
+              {edge.weight}
+            </text>
+          </g>
         ))}
       </svg>
       <>
