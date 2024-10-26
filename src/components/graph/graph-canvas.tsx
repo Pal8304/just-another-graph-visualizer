@@ -8,13 +8,6 @@ import { useEffect, useState } from "react";
 
 export function GraphCanvas() {
   const { x, y } = useMouse();
-  const [mouse, setMouse] = useState<{
-    x: number;
-    y: number;
-  }>({
-    x,
-    y,
-  });
   const { nodes, edges, action, addNode, updateNodePosition } = useGraphStore();
   const [currentDraggingNode, setCurrentDraggingNode] = useState<
     string | null
