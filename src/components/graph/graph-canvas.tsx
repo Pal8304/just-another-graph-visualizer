@@ -8,7 +8,15 @@ import { useEffect, useState } from "react";
 
 export function GraphCanvas() {
   const { x, y } = useMouse();
-  const { nodes, edges, action, addNode, updateNodePosition } = useGraphStore();
+  const {
+    nodes,
+    edges,
+    action,
+    nodeToAdd,
+    addNode,
+    updateNodePosition,
+    setAction,
+  } = useGraphStore();
   const [currentDraggingNode, setCurrentDraggingNode] = useState<
     string | null
   >();
@@ -17,7 +25,7 @@ export function GraphCanvas() {
     if (currentDraggingNode) {
       updateNodePosition(currentDraggingNode, x, y);
     }
-  }, [x, y, currentDraggingNode]);
+  }, [x, y, currentDraggingNode, updateNodePosition]);
 
   return (
     <div className="bg-foreground text-background text-opacity-5 rounded-md w-2/3 h-3/4 flex flex-col items-center justify-center">
@@ -25,7 +33,13 @@ export function GraphCanvas() {
         className="w-full h-full z-10 absolute"
         onClick={() => {
           if (action === "add-node") {
-            addNode({ id: crypto.randomUUID(), nodeLabel: "A", x, y });
+            addNode({
+              id: nodeToAdd?.id || "",
+              nodeLabel: nodeToAdd?.nodeLabel || "A",
+              x: x,
+              y: y,
+            });
+            setAction("view");
           }
         }}
       ></div>
@@ -41,11 +55,9 @@ export function GraphCanvas() {
             node={node}
             dragStart={() => {
               setCurrentDraggingNode(node.id);
-              console.log("drag start");
             }}
             dragEnd={() => {
               setCurrentDraggingNode(null);
-              console.log("drag end");
             }}
           />
         ))}

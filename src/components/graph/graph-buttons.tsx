@@ -2,6 +2,8 @@
 
 import { GraphStore, useGraphStore } from "@/lib/stores/graph";
 import { Button } from "../ui/button";
+import { AddNodeDialog } from "./add-node-dialog";
+// import { AddEdgeDialog } from "./add-edge-dialog";
 
 function ActionButton({ action }: { action: GraphStore["action"] }) {
   const { action: currentAction, setAction: setCurrentAction } =
@@ -31,6 +33,8 @@ export function GraphButtons() {
       {actions.map((action) => (
         <ActionButton key={action} action={action} />
       ))}
+      <AddNodeDialog />
+      {/* <AddEdgeDialog /> */}
     </div>
   );
 }

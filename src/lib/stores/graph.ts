@@ -19,6 +19,8 @@ interface State {
   nodes: Node[];
   edges: Edge[];
   selectedNode: Node | null;
+  nodeToAdd: Node | null;
+  edgeToAdd: Edge | null;
   action: "view" | "add-node" | "remove-node" | "add-edge" | "remove-edge";
 }
 
@@ -27,6 +29,8 @@ interface Actions {
   removeNode: (node: Node) => void;
   addEdge: (from: Node, to: Node) => void;
   removeEdge: (from: Node, to: Node) => void;
+  setNodeToAdd: (node: Node) => void;
+  setEdgeToAdd: (edge: Edge) => void;
   setSelectedNode: (node: Node) => void;
   setAction: (action: State["action"]) => void;
   updateNodePosition: (id: string, x: number, y: number) => void;
@@ -41,9 +45,11 @@ export const useGraphStore = create(
       edges: [],
       action: "view",
       selectedNode: null,
+      nodeToAdd: null,
+      edgeToAdd: null,
       addEdge: (from: Node, to: Node) => {
         set(({ edges }) => ({
-          edges: [...edges, { directed: false, from, to, weight: null }],
+          edges: [...edges, { directed: false, from, to, weight: 100 }],
         }));
       },
       removeEdge: (from: Node, to: Node) => {
@@ -54,6 +60,8 @@ export const useGraphStore = create(
           ),
         }));
       },
+      setNodeToAdd: (node: Node) => set({ nodeToAdd: node }),
+      setEdgeToAdd: (edge: Edge) => set({ edgeToAdd: edge }),
       setSelectedNode: (node: Node) =>
         set(({ selectedNode, action, addEdge, removeEdge }) => {
           if (selectedNode && selectedNode !== node) {
