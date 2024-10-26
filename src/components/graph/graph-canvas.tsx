@@ -5,7 +5,21 @@ import { Node } from "./node";
 
 export function GraphCanvas() {
   const { ref, x, y } = useMouse();
-  const { action, addNode } = useGraphStore();
+  const { nodes, edges, action, addNode, updateNodePosition } = useGraphStore();
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const id = e.dataTransfer.getData("text/plain");
+    const rect = ref.current?.getBoundingClientRect();
+    if (rect) {
+      const newX = e.clientX - rect.left;
+      const newY = e.clientY - rect.top;
+      updateNodePosition(id, newX, newY);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
   return (
     <div
       ref={ref}
@@ -18,9 +32,24 @@ export function GraphCanvas() {
             addNode({ id: crypto.randomUUID(), nodeLabel: "A", x, y });
           }
         }}
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
       ></div>
+      <svg className="w-full h-full absolute">
+        {edges.map((edge, index) => (
+          <line
+            key={index}
+            x1={edge.from.x}
+            y1={edge.from.y}
+            x2={edge.to.x}
+            y2={edge.to.y}
+            stroke="black"
+            strokeWidth="2"
+          />
+        ))}
+      </svg>
       <>
-        {useGraphStore().nodes.map((node) => (
+        {nodes.map((node) => (
           <Node key={node.id} {...node} />
         ))}
       </>

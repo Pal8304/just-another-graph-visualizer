@@ -1,4 +1,5 @@
 import { useGraphStore } from "@/lib/stores/graph";
+import { useState } from "react";
 
 export function Node({
   id,
@@ -11,7 +12,17 @@ export function Node({
   x: number;
   y: number;
 }) {
-  const { action, removeNode } = useGraphStore();
+  const { action, removeNode, setSelectedNode } = useGraphStore();
+  const [, setIsDragging] = useState(false);
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    if (action === "view") {
+      setIsDragging(true);
+      e.dataTransfer.setData("text/plain", id);
+    }
+  };
+  const handleDragEnd = () => {
+    setIsDragging(false);
+  };
   return (
     <div
       className="bg-background text-foreground rounded-full w-8 h-8 flex items-center justify-center z-20"
@@ -20,10 +31,17 @@ export function Node({
         left: x,
         top: y,
         transform: "translate(-50%, -50%)",
+        cursor: action === "view" ? "grab" : "default",
       }}
+      draggable={action === "view"}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
       onClick={() => {
         if (action === "remove-node") {
-          removeNode({ id: id, nodeLabel: nodeLabel, x: x, y: y });
+          removeNode({ id, nodeLabel, x, y });
+        }
+        if (action === "add-edge") {
+          setSelectedNode({ id, nodeLabel, x, y });
         }
       }}
     >

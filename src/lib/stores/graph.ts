@@ -17,14 +17,17 @@ interface Edge {
 interface State {
   nodes: Node[];
   edges: Edge[];
+  selectedNode: Node | null;
   action: "view" | "add-node" | "remove-node" | "add-edge" | "remove-edge";
 }
 
 interface Actions {
   addNode: (node: Node) => void;
-  addEdge: () => void;
   removeNode: (node: Node) => void;
+  addEdge: (from: Node, to: Node) => void;
+  setSelectedNode: (node: Node) => void;
   setAction: (action: State["action"]) => void;
+  updateNodePosition: (id: string, x: number, y: number) => void;
 }
 
 export type GraphStore = State & Actions;
@@ -33,7 +36,25 @@ export const useGraphStore = create<GraphStore>((set) => ({
   nodes: [],
   edges: [],
   action: "view",
-  addEdge: () => {},
+  selectedNode: null,
+  addEdge: (from: Node, to: Node) => {
+    set({
+      edges: [
+        ...useGraphStore.getState().edges,
+        { directed: false, from, to, weight: null },
+      ],
+    });
+    console.log("Added edge", from, to);
+  },
+  setSelectedNode: (node: Node) => {
+    const selectedNode = useGraphStore.getState().selectedNode;
+    if (selectedNode) {
+      useGraphStore.getState().addEdge(selectedNode, node);
+      set({ selectedNode: null });
+    } else {
+      set({ selectedNode: node });
+    }
+  },
   addNode: (node: Node) => {
     set({ nodes: [...useGraphStore.getState().nodes, node] });
     console.log("Added node", node);
@@ -46,5 +67,23 @@ export const useGraphStore = create<GraphStore>((set) => ({
   },
   setAction: (action: State["action"]) => {
     set({ action: action });
+  },
+  updateNodePosition: (id: string, x: number, y: number) => {
+    set({
+      nodes: useGraphStore
+        .getState()
+        .nodes.map((node) => (node.id === id ? { ...node, x, y } : node)),
+    });
+    set({
+      edges: useGraphStore.getState().edges.map((edge) => {
+        if (edge.from.id === id) {
+          return { ...edge, from: { ...edge.from, x, y } };
+        }
+        if (edge.to.id === id) {
+          return { ...edge, to: { ...edge.to, x, y } };
+        }
+        return edge;
+      }),
+    });
   },
 }));
