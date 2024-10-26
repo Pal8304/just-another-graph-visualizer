@@ -27,7 +27,7 @@ export function GraphButtons() {
   ];
 
   return (
-    <div className="flex flex-row justify-center w-2/3 p-4 m-4 gap-4">
+    <div className="flex flex-row justify-center w-2/3 p-4 m-4 gap-4 z-30">
       {actions.map((action) => (
         <ActionButton key={action} action={action} />
       ))}
