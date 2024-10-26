@@ -57,16 +57,10 @@ export const useGraphStore = create(
       setSelectedNode: (node: Node) =>
         set(({ selectedNode, action, addEdge, removeEdge }) => {
           if (selectedNode && selectedNode !== node) {
-            if (action === "add-edge") {
-              addEdge(selectedNode, node);
-            }
-            if (action === "remove-edge") {
-              removeEdge(selectedNode, node);
-            }
+            if (action === "add-edge") addEdge(selectedNode, node);
+            if (action === "remove-edge") removeEdge(selectedNode, node);
           }
-          return {
-            selectedNode: selectedNode ? null : node,
-          };
+          return { selectedNode: selectedNode ? null : node };
         }),
       addNode: (node: Node) =>
         set({ nodes: [...useGraphStore.getState().nodes, node] }),
