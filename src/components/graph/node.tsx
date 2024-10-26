@@ -12,7 +12,7 @@ export function Node({
   x: number;
   y: number;
 }) {
-  const { action, removeNode, setSelectedNode } = useGraphStore();
+  const { action, selectedNode, removeNode, setSelectedNode } = useGraphStore();
   const [, setIsDragging] = useState(false);
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
     if (action === "view") {
@@ -32,6 +32,7 @@ export function Node({
         top: y,
         transform: "translate(-50%, -50%)",
         cursor: action === "view" ? "grab" : "default",
+        border: selectedNode?.id === id ? "4px solid green" : "none",
       }}
       draggable={action === "view"}
       onDragStart={handleDragStart}
@@ -40,7 +41,7 @@ export function Node({
         if (action === "remove-node") {
           removeNode({ id, nodeLabel, x, y });
         }
-        if (action === "add-edge") {
+        if (action === "add-edge" || action === "remove-edge") {
           setSelectedNode({ id, nodeLabel, x, y });
         }
       }}

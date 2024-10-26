@@ -25,6 +25,7 @@ interface Actions {
   addNode: (node: Node) => void;
   removeNode: (node: Node) => void;
   addEdge: (from: Node, to: Node) => void;
+  removeEdge: (from: Node, to: Node) => void;
   setSelectedNode: (node: Node) => void;
   setAction: (action: State["action"]) => void;
   updateNodePosition: (id: string, x: number, y: number) => void;
@@ -46,10 +47,26 @@ export const useGraphStore = create<GraphStore>((set) => ({
     });
     console.log("Added edge", from, to);
   },
+  removeEdge: (from: Node, to: Node) => {
+    // might have to change this to removeEdge: (edge: Edge) cause of multiple edges
+    set({
+      edges: useGraphStore.getState().edges.filter((edge) => {
+        return edge.from.id !== from.id || edge.to.id !== to.id;
+      }),
+    });
+    console.log("Remove edge", from, to);
+  },
   setSelectedNode: (node: Node) => {
     const selectedNode = useGraphStore.getState().selectedNode;
-    if (selectedNode) {
-      useGraphStore.getState().addEdge(selectedNode, node);
+    if (selectedNode === node) {
+      set({ selectedNode: null });
+    } else if (selectedNode) {
+      if (useGraphStore.getState().action === "add-edge") {
+        useGraphStore.getState().addEdge(selectedNode, node);
+      }
+      if (useGraphStore.getState().action === "remove-edge") {
+        useGraphStore.getState().removeEdge(selectedNode, node);
+      }
       set({ selectedNode: null });
     } else {
       set({ selectedNode: node });
@@ -63,6 +80,11 @@ export const useGraphStore = create<GraphStore>((set) => ({
     set({
       nodes: useGraphStore.getState().nodes.filter((n) => n.id !== node.id),
     });
+    set({
+      edges: useGraphStore.getState().edges.filter(
+        (edge) => edge.from.id !== node.id && edge.to.id !== node.id
+      ),
+    })
     console.log("Removed node", node);
   },
   setAction: (action: State["action"]) => {
