@@ -27,10 +27,10 @@ interface State {
 interface Actions {
   addNode: (node: Node) => void;
   removeNode: (node: Node) => void;
-  addEdge: (from: Node, to: Node) => void;
+  addEdge: (edge: Edge) => void;
   removeEdge: (from: Node, to: Node) => void;
   setNodeToAdd: (node: Node) => void;
-  setEdgeToAdd: (edge: Edge) => void;
+  setEdgeToAdd: (edge: Edge | null) => void;
   setSelectedNode: (node: Node) => void;
   setAction: (action: State["action"]) => void;
   updateNodePosition: (id: string, x: number, y: number) => void;
@@ -47,26 +47,37 @@ export const useGraphStore = create(
       selectedNode: null,
       nodeToAdd: null,
       edgeToAdd: null,
-      addEdge: (from: Node, to: Node) => {
+      addEdge: (edge: Edge) => {
         set(({ edges }) => ({
-          edges: [...edges, { directed: false, from, to, weight: 100 }],
+          edges: [...edges, edge],
         }));
       },
       removeEdge: (from: Node, to: Node) => {
         // might have to change this to removeEdge: (edge: Edge) cause of multiple edges
         set(({ edges }) => ({
           edges: edges.filter(
-            (edge) => edge.from.id !== from.id || edge.to.id !== to.id,
+            (edge) => edge.from.id !== from.id || edge.to.id !== to.id
           ),
         }));
       },
       setNodeToAdd: (node: Node) => set({ nodeToAdd: node }),
-      setEdgeToAdd: (edge: Edge) => set({ edgeToAdd: edge }),
+      setEdgeToAdd: (edge: Edge | null) => set({ edgeToAdd: edge }),
       setSelectedNode: (node: Node) =>
-        set(({ selectedNode, action, addEdge, removeEdge }) => {
+        set(({ selectedNode, action, setEdgeToAdd, removeEdge }) => {
+          console.log(selectedNode, node);
           if (selectedNode && selectedNode !== node) {
-            if (action === "add-edge") addEdge(selectedNode, node);
+            console.log("Not the same node");
+            if (action === "add-edge")
+              setEdgeToAdd({
+                directed: false,
+                from: selectedNode,
+                to: node,
+                weight: 100,
+              });
             if (action === "remove-edge") removeEdge(selectedNode, node);
+          }
+          if (selectedNode === node) {
+            return { selectedNode: null };
           }
           return { selectedNode: selectedNode ? null : node };
         }),
@@ -76,7 +87,7 @@ export const useGraphStore = create(
         set(({ nodes, edges }) => ({
           nodes: nodes.filter((n) => n.id !== node.id),
           edges: edges.filter(
-            (edge) => edge.from.id !== node.id && edge.to.id !== node.id,
+            (edge) => edge.from.id !== node.id && edge.to.id !== node.id
           ),
         }));
       },
@@ -86,7 +97,7 @@ export const useGraphStore = create(
       updateNodePosition: (id: string, x: number, y: number) => {
         set(({ nodes, edges }) => ({
           nodes: nodes.map((node) =>
-            node.id === id ? { ...node, x, y } : node,
+            node.id === id ? { ...node, x, y } : node
           ),
           edges: edges.map((edge) => ({
             ...edge,
@@ -98,6 +109,6 @@ export const useGraphStore = create(
     }),
     {
       name: "graph-store",
-    },
-  ),
+    }
+  )
 );

@@ -10,16 +10,25 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useEffect, useState } from "react";
 
 import { useGraphStore } from "@/lib/stores/graph";
+import { Checkbox } from "../ui/checkbox";
 
 export function AddEdgeDialog() {
-  const { action, setAction } = useGraphStore();
+  const { edgeToAdd, addEdge, setEdgeToAdd } = useGraphStore();
+  const [open, setOpen] = useState(edgeToAdd !== null);
+  const [weight, setWeight] = useState(0);
+  const [directed, setDirected] = useState(false);
+  useEffect(() => {
+    setOpen(edgeToAdd !== null);
+  }, [edgeToAdd]);
   return (
     <Dialog
-      open={action === "add-edge"}
+      open={open}
       onOpenChange={() => {
-        setAction("view");
+        setOpen(false);
+        setEdgeToAdd(null);
       }}
     >
       <DialogContent className="sm:max-w-[425px]">
@@ -29,27 +38,42 @@ export function AddEdgeDialog() {
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="from" className="text-right">
-              From
+            <Label htmlFor="name" className="text-right">
+              Edge Weight
             </Label>
-            <Input id="from" value="A" className="col-span-3" />
-            <Label htmlFor="to" className="text-right">
-              To
-            </Label>
-            <Input id="to" value="B" className="col-span-3" />
-            <Label htmlFor="weight" className="text-right">
-              Weight
-            </Label>
-            <Input id="weight" value="1" className="col-span-3" />
+            <Input
+              id="node"
+              className="col-span-3"
+              type="number"
+              onChange={(e) => setWeight(parseInt(e.target.value))}
+            />
+            <Label className="text-right">Directed</Label>
+            <Checkbox id="directed" onChange={() => setDirected(!directed)} />
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit">Add edge</Button>
+          <Button
+            type="submit"
+            onClick={() => {
+              if (edgeToAdd) {
+                edgeToAdd.weight = weight;
+                edgeToAdd.directed = directed;
+                addEdge(edgeToAdd);
+                setEdgeToAdd(null);
+              }
+              setOpen(false);
+            }}
+          >
+            Add Edge
+          </Button>
           <DialogClose asChild>
             <Button
               type="button"
               variant="secondary"
-              onClick={() => setAction("view")}
+              onClick={() => {
+                setOpen(false);
+                setEdgeToAdd(null);
+              }}
             >
               Close
             </Button>
