@@ -7,7 +7,7 @@ import { Edge } from "./edge";
 import { useEffect, useState } from "react";
 
 export function GraphCanvas() {
-  const { x, y } = useMouse();
+  const { ref, x, y } = useMouse();
   const {
     nodes,
     edges,
@@ -28,7 +28,10 @@ export function GraphCanvas() {
   }, [x, y, currentDraggingNode, updateNodePosition]);
 
   return (
-    <div className="bg-foreground text-background text-opacity-5 rounded-md w-2/3 h-3/4 flex flex-col items-center justify-center">
+    <div
+      className="bg-foreground text-background text-opacity-5 rounded-md w-2/3 h-3/4 flex flex-col items-center justify-center relative"
+      ref={ref}
+    >
       <div
         className="w-full h-full z-10 absolute"
         onClick={() => {

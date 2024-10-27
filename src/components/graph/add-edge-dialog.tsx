@@ -48,7 +48,12 @@ export function AddEdgeDialog() {
               onChange={(e) => setWeight(parseInt(e.target.value))}
             />
             <Label className="text-right">Directed</Label>
-            <Checkbox id="directed" onChange={() => setDirected(!directed)} />
+            <Checkbox
+              id="directed"
+              onCheckedChange={(checked: boolean | "indeterminate") =>
+                setDirected(checked === true)
+              }
+            />
           </div>
         </div>
         <DialogFooter>
@@ -58,6 +63,7 @@ export function AddEdgeDialog() {
               if (edgeToAdd) {
                 edgeToAdd.weight = weight;
                 edgeToAdd.directed = directed;
+                console.log(edgeToAdd);
                 addEdge(edgeToAdd);
                 setEdgeToAdd(null);
               }
