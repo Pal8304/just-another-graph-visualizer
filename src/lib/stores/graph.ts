@@ -56,7 +56,7 @@ export const useGraphStore = create(
         // might have to change this to removeEdge: (edge: Edge) cause of multiple edges
         set(({ edges }) => ({
           edges: edges.filter(
-            (edge) => edge.from.id !== from.id || edge.to.id !== to.id
+            (edge) => edge.from.id !== from.id || edge.to.id !== to.id,
           ),
         }));
       },
@@ -87,7 +87,7 @@ export const useGraphStore = create(
         set(({ nodes, edges }) => ({
           nodes: nodes.filter((n) => n.id !== node.id),
           edges: edges.filter(
-            (edge) => edge.from.id !== node.id && edge.to.id !== node.id
+            (edge) => edge.from.id !== node.id && edge.to.id !== node.id,
           ),
         }));
       },
@@ -97,7 +97,7 @@ export const useGraphStore = create(
       updateNodePosition: (id: string, x: number, y: number) => {
         set(({ nodes, edges }) => ({
           nodes: nodes.map((node) =>
-            node.id === id ? { ...node, x, y } : node
+            node.id === id ? { ...node, x, y } : node,
           ),
           edges: edges.map((edge) => ({
             ...edge,
@@ -109,6 +109,6 @@ export const useGraphStore = create(
     }),
     {
       name: "graph-store",
-    }
-  )
+    },
+  ),
 );
