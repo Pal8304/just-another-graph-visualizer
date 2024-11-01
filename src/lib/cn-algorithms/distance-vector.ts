@@ -1,3 +1,1 @@
-export function DistanceVector(){
-    
-}
+export function DistanceVector() {}
