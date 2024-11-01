@@ -22,6 +22,7 @@ interface State {
   nodeToAdd: Node | null;
   edgeToAdd: Edge | null;
   action: "view" | "add-node" | "remove-node" | "add-edge" | "remove-edge";
+  isGraphAlgorithmRunning: boolean;
 }
 
 interface Actions {
@@ -34,6 +35,7 @@ interface Actions {
   setSelectedNode: (node: Node) => void;
   setAction: (action: State["action"]) => void;
   updateNodePosition: (id: string, x: number, y: number) => void;
+  setIsGraphAlgorithmRunning: (running: boolean) => void;
 }
 
 export type GraphStore = State & Actions;
@@ -47,6 +49,7 @@ export const useGraphStore = create(
       selectedNode: null,
       nodeToAdd: null,
       edgeToAdd: null,
+      isGraphAlgorithmRunning: false,
       addEdge: (edge: Edge) => {
         set(({ edges }) => ({
           edges: [...edges, edge],
@@ -56,7 +59,7 @@ export const useGraphStore = create(
         // might have to change this to removeEdge: (edge: Edge) cause of multiple edges
         set(({ edges }) => ({
           edges: edges.filter(
-            (edge) => edge.from.id !== from.id || edge.to.id !== to.id,
+            (edge) => edge.from.id !== from.id || edge.to.id !== to.id
           ),
         }));
       },
@@ -87,7 +90,7 @@ export const useGraphStore = create(
         set(({ nodes, edges }) => ({
           nodes: nodes.filter((n) => n.id !== node.id),
           edges: edges.filter(
-            (edge) => edge.from.id !== node.id && edge.to.id !== node.id,
+            (edge) => edge.from.id !== node.id && edge.to.id !== node.id
           ),
         }));
       },
@@ -97,7 +100,7 @@ export const useGraphStore = create(
       updateNodePosition: (id: string, x: number, y: number) => {
         set(({ nodes, edges }) => ({
           nodes: nodes.map((node) =>
-            node.id === id ? { ...node, x, y } : node,
+            node.id === id ? { ...node, x, y } : node
           ),
           edges: edges.map((edge) => ({
             ...edge,
@@ -106,9 +109,12 @@ export const useGraphStore = create(
           })),
         }));
       },
+      setIsGraphAlgorithmRunning: (running: boolean) => {
+        set({ isGraphAlgorithmRunning: running });
+      },
     }),
     {
       name: "graph-store",
-    },
-  ),
+    }
+  )
 );
