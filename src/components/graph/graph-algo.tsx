@@ -14,7 +14,7 @@ export function GraphAlgoComponent() {
   const { isGraphAlgorithmRunning, setIsGraphAlgorithmRunning } =
     useGraphStore();
   const [floodingInstance, setFloodingInstance] = useState<Flooding | null>(
-    null
+    null,
   );
   const { nodes, edges } = useGraphStore();
   const constructGraph = () => {
@@ -75,8 +75,8 @@ export function GraphAlgoComponent() {
                 new Flooding(
                   constructGraph(),
                   nodes[0].id,
-                  nodes[nodes.length - 1].id
-                )
+                  nodes[nodes.length - 1].id,
+                ),
               );
             }
           }}

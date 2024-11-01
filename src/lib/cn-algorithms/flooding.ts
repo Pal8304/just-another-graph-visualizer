@@ -15,7 +15,7 @@ class Flooding implements GraphAlgorithm {
       { adjacentNodes: [node: string, weight: number][] }
     >,
     sourceNode: string,
-    destinationNode: string
+    destinationNode: string,
   ) {
     this.Graph = Graph;
     this.sourceNode = sourceNode;

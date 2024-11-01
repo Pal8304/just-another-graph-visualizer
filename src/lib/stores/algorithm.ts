@@ -8,7 +8,7 @@ interface State {
 
 interface Actions {
   setSelectedAlgorithm: (
-    algorithm: "" | "flooding" | "distance-vector"
+    algorithm: "" | "flooding" | "distance-vector",
   ) => void;
   setAlgorithm: (algorithm: GraphAlgorithm) => void;
 }
@@ -22,7 +22,7 @@ export const useAlgorithmStore = create<AlgorithmStore>((set) => ({
     set({ algorithm });
   },
   setSelectedAlgorithm: (
-    selectedAlgorithm: "" | "flooding" | "distance-vector"
+    selectedAlgorithm: "" | "flooding" | "distance-vector",
   ) => {
     set({ selectedAlgorithm });
   },
