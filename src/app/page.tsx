@@ -1,6 +1,7 @@
-import { GraphCanvas } from "@/components/graph/graph-canvas";
-import { GraphButtons } from "@/components/graph/graph-buttons";
-import { GraphAlgoComponent } from "@/components/graph/graph-algo";
+import { GraphCanvas } from "@/components/graph/canvas/canvas";
+import { GraphButtons } from "@/components/graph/canvas/actions";
+import { GraphAlgoComponent } from "@/components/graph/algo/controls";
+import { GraphAlgoSelector } from "@/components/graph/algo/selector";
 
 export default function Home() {
   return (
@@ -12,7 +13,10 @@ export default function Home() {
         <GraphCanvas />
       </div>
       <div className="w-1/4 h-full flex flex-col items-center justify-center">
-        <GraphAlgoComponent />
+        <div>
+          <GraphAlgoSelector />
+          <GraphAlgoComponent />
+        </div>
       </div>
     </div>
   );

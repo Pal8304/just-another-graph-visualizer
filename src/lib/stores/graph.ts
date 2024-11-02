@@ -1,41 +1,41 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-interface Node {
+export interface GraphNode {
   id: string;
   nodeLabel: string;
   x: number;
   y: number;
 }
 
-interface Edge {
+export interface GraphEdge {
   directed: boolean;
-  from: Node;
-  to: Node;
-  weight: number | null;
+  from: GraphNode;
+  to: GraphNode;
+  weight: number;
 }
 
 interface State {
-  nodes: Node[];
-  edges: Edge[];
-  selectedNode: Node | null;
-  nodeToAdd: Node | null;
-  edgeToAdd: Edge | null;
+  nodes: GraphNode[];
+  edges: GraphEdge[];
+  selectedNode: GraphNode | null;
+  nodeToAdd: GraphNode | null;
+  edgeToAdd: GraphEdge | null;
   action: "view" | "add-node" | "remove-node" | "add-edge" | "remove-edge";
-  isGraphAlgorithmRunning: boolean;
+  isAlgoRunning: boolean;
 }
 
 interface Actions {
-  addNode: (node: Node) => void;
-  removeNode: (node: Node) => void;
-  addEdge: (edge: Edge) => void;
-  removeEdge: (from: Node, to: Node) => void;
-  setNodeToAdd: (node: Node) => void;
-  setEdgeToAdd: (edge: Edge | null) => void;
-  setSelectedNode: (node: Node) => void;
+  addNode: (node: GraphNode) => void;
+  removeNode: (node: GraphNode) => void;
+  addEdge: (edge: GraphEdge) => void;
+  removeEdge: (from: GraphNode, to: GraphNode) => void;
+  setNodeToAdd: (node: GraphNode) => void;
+  setEdgeToAdd: (edge: GraphEdge | null) => void;
+  setSelectedNode: (node: GraphNode) => void;
   setAction: (action: State["action"]) => void;
   updateNodePosition: (id: string, x: number, y: number) => void;
-  setIsGraphAlgorithmRunning: (running: boolean) => void;
+  setAlgoRunning: (running: boolean) => void;
 }
 
 export type GraphStore = State & Actions;
@@ -49,13 +49,13 @@ export const useGraphStore = create(
       selectedNode: null,
       nodeToAdd: null,
       edgeToAdd: null,
-      isGraphAlgorithmRunning: false,
-      addEdge: (edge: Edge) => {
+      isAlgoRunning: false,
+      addEdge: (edge: GraphEdge) => {
         set(({ edges }) => ({
           edges: [...edges, edge],
         }));
       },
-      removeEdge: (from: Node, to: Node) => {
+      removeEdge: (from: GraphNode, to: GraphNode) => {
         // might have to change this to removeEdge: (edge: Edge) cause of multiple edges
         set(({ edges }) => ({
           edges: edges.filter(
@@ -63,9 +63,9 @@ export const useGraphStore = create(
           ),
         }));
       },
-      setNodeToAdd: (node: Node) => set({ nodeToAdd: node }),
-      setEdgeToAdd: (edge: Edge | null) => set({ edgeToAdd: edge }),
-      setSelectedNode: (node: Node) =>
+      setNodeToAdd: (node: GraphNode) => set({ nodeToAdd: node }),
+      setEdgeToAdd: (edge: GraphEdge | null) => set({ edgeToAdd: edge }),
+      setSelectedNode: (node: GraphNode) =>
         set(({ selectedNode, action, setEdgeToAdd, removeEdge }) => {
           console.log(selectedNode, node);
           if (selectedNode && selectedNode !== node) {
@@ -84,9 +84,9 @@ export const useGraphStore = create(
           }
           return { selectedNode: selectedNode ? null : node };
         }),
-      addNode: (node: Node) =>
+      addNode: (node: GraphNode) =>
         set({ nodes: [...useGraphStore.getState().nodes, node] }),
-      removeNode: (node: Node) => {
+      removeNode: (node: GraphNode) => {
         set(({ nodes, edges }) => ({
           nodes: nodes.filter((n) => n.id !== node.id),
           edges: edges.filter(
@@ -109,8 +109,8 @@ export const useGraphStore = create(
           })),
         }));
       },
-      setIsGraphAlgorithmRunning: (running: boolean) => {
-        set({ isGraphAlgorithmRunning: running });
+      setAlgoRunning: (running: boolean) => {
+        set({ isAlgoRunning: running });
       },
     }),
     {

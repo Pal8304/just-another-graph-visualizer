@@ -1,29 +1,33 @@
 import { create } from "zustand";
-import { GraphAlgorithm } from "../cn-algorithms/graph-algorithm";
+import { Flooding } from "../cn-algorithms/flooding";
+import { DistanceVector } from "../cn-algorithms/distance-vector";
+
+export type GraphAlgorithmType = typeof Flooding | typeof DistanceVector | null;
 
 interface State {
-  selectedAlgorithm: "" | "flooding" | "distance-vector";
-  algorithm: GraphAlgorithm | null;
+  selectedAlgorithm: "flooding" | "distance-vector" | "";
+  algorithm: GraphAlgorithmType;
 }
 
 interface Actions {
-  setSelectedAlgorithm: (
-    algorithm: "" | "flooding" | "distance-vector",
-  ) => void;
-  setAlgorithm: (algorithm: GraphAlgorithm) => void;
+  setAlgorithm: (algorithm: State["selectedAlgorithm"]) => void;
 }
+
+const nameToAlgo: Record<State["selectedAlgorithm"], GraphAlgorithmType> = {
+  flooding: Flooding,
+  "distance-vector": DistanceVector,
+  "": null,
+};
 
 export type AlgorithmStore = State & Actions;
 
 export const useAlgorithmStore = create<AlgorithmStore>((set) => ({
   selectedAlgorithm: "",
   algorithm: null,
-  setAlgorithm: (algorithm: GraphAlgorithm) => {
-    set({ algorithm });
-  },
-  setSelectedAlgorithm: (
-    selectedAlgorithm: "" | "flooding" | "distance-vector",
-  ) => {
+  setAlgorithm: (selectedAlgorithm: State["selectedAlgorithm"]) => {
     set({ selectedAlgorithm });
+    console.log(selectedAlgorithm);
+    if (nameToAlgo[selectedAlgorithm])
+      set({ algorithm: nameToAlgo[selectedAlgorithm] });
   },
 }));

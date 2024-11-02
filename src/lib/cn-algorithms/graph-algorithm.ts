@@ -1,8 +1,7 @@
+import { AdjList } from "./utils";
+
 export interface GraphAlgorithm {
-  Graph: Map<
-    { node: string },
-    { adjacentNodes: [node: string, weight: number | null][] }
-  >;
+  Graph: AdjList;
   nextStep: () => void;
   previousStep: () => void;
 }

@@ -1,21 +1,17 @@
+import { GraphNode } from "../stores/graph";
 import { GraphAlgorithm } from "./graph-algorithm";
+import { AdjList } from "./utils";
 
-class Flooding implements GraphAlgorithm {
-  Graph: Map<
-    { node: string },
-    { adjacentNodes: [node: string, weight: number][] }
-  >;
-  sourceNode: string;
-  destinationNode: string;
+export class Flooding implements GraphAlgorithm {
+  Graph: AdjList;
+  sourceNode: GraphNode;
+  destinationNode: GraphNode;
   visited: Set<string>;
-  queue: [node: string, weight: number][] = [];
+  queue: [node: GraphNode, weight: number][] = [];
   constructor(
-    Graph: Map<
-      { node: string },
-      { adjacentNodes: [node: string, weight: number][] }
-    >,
-    sourceNode: string,
-    destinationNode: string,
+    Graph: AdjList,
+    sourceNode: GraphNode,
+    destinationNode: GraphNode,
   ) {
     this.Graph = Graph;
     this.sourceNode = sourceNode;
@@ -30,13 +26,12 @@ class Flooding implements GraphAlgorithm {
     this.queue.sort((a, b) => a[1] - b[1]);
     const [node, currrentweight] = this.queue.shift()!;
     if (node === this.destinationNode) return;
-    if (this.visited.has(node)) return;
-    this.visited.add(node);
+    if (this.visited.has(node.id)) return;
+    this.visited.add(node.id);
     console.log(`Visiting node ${node} with weight ${currrentweight}`);
-    if (this.Graph.has({ node })) {
-      for (const [adjacentNode, weight] of this.Graph.get({ node })!
-        .adjacentNodes) {
-        if (!this.visited.has(adjacentNode)) {
+    if (this.Graph.has(node.id)) {
+      for (const [adjacentNode, weight] of this.Graph.get(node.id) || []) {
+        if (!this.visited.has(adjacentNode.id)) {
           this.queue.push([adjacentNode, weight + currrentweight]);
         }
       }
@@ -46,5 +41,3 @@ class Flooding implements GraphAlgorithm {
     console.log("Previous step");
   }
 }
-
-export default Flooding;
