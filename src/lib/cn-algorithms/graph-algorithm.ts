@@ -5,4 +5,5 @@ export interface GraphAlgorithm {
   nextStep: () => void;
   previousStep: () => void;
   getVisitedNodes: () => Set<string>;
+  endAlgorithm: () => void;
 }

@@ -11,7 +11,7 @@ export class Flooding implements GraphAlgorithm {
   constructor(
     Graph: AdjList,
     sourceNode: GraphNode,
-    destinationNode: GraphNode,
+    destinationNode: GraphNode
   ) {
     this.Graph = Graph;
     this.sourceNode = sourceNode;
@@ -25,10 +25,13 @@ export class Flooding implements GraphAlgorithm {
     if (this.queue.length === 0) return;
     this.queue.sort((a, b) => a[1] - b[1]);
     const [node, currrentweight] = this.queue.shift()!;
-    if (node === this.destinationNode) return;
+    if (node.id === this.destinationNode.id) {
+      console.log("Found destination node");
+      this.endAlgorithm();
+      return;
+    }
     if (this.visited.has(node.id)) return;
     this.visited.add(node.id);
-    console.log(`Visiting node ${node} with weight ${currrentweight}`);
     if (this.Graph.has(node.id)) {
       for (const [adjacentNode, weight] of this.Graph.get(node.id) || []) {
         if (!this.visited.has(adjacentNode.id)) {
@@ -42,5 +45,9 @@ export class Flooding implements GraphAlgorithm {
   }
   getVisitedNodes() {
     return this.visited;
+  }
+  endAlgorithm() {
+    this.visited = new Set();
+    console.log("End Algorithm");
   }
 }

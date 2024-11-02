@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 import { useGraphStore } from "@/lib/stores/graph";
 
 export function AddNodeDialog() {
-  const { action, setNodeToAdd, setAction } = useGraphStore();
+  const { action, setNodeToAdd, setAction, isAlgoRunning } = useGraphStore();
   const [open, setOpen] = useState(action === "add-node");
   const [nodeLabel, setNodeLabel] = useState("A");
   useEffect(() => {
@@ -25,7 +25,7 @@ export function AddNodeDialog() {
   }, [action]);
   return (
     <Dialog
-      open={open}
+      open={open && !isAlgoRunning}
       onOpenChange={() => {
         setOpen(false);
         setAction("view");
