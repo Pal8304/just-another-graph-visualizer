@@ -23,6 +23,7 @@ interface State {
   edgeToAdd: GraphEdge | null;
   action: "view" | "add-node" | "remove-node" | "add-edge" | "remove-edge";
   isAlgoRunning: boolean;
+  visitedNodes: string[];
 }
 
 interface Actions {
@@ -36,6 +37,7 @@ interface Actions {
   setAction: (action: State["action"]) => void;
   updateNodePosition: (id: string, x: number, y: number) => void;
   setAlgoRunning: (running: boolean) => void;
+  setVisitedNodes: (visitedNodes: Set<string>) => void;
 }
 
 export type GraphStore = State & Actions;
@@ -50,6 +52,7 @@ export const useGraphStore = create(
       nodeToAdd: null,
       edgeToAdd: null,
       isAlgoRunning: false,
+      visitedNodes: [],
       addEdge: (edge: GraphEdge) => {
         set(({ edges }) => ({
           edges: [...edges, edge],
@@ -112,6 +115,9 @@ export const useGraphStore = create(
       setAlgoRunning: (running: boolean) => {
         set({ isAlgoRunning: running });
       },
+      setVisitedNodes: (visitedNodes: Set<string>) => {
+        set({ visitedNodes: Array.from(visitedNodes) });
+      }
     }),
     {
       name: "graph-store",

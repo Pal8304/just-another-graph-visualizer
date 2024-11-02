@@ -27,4 +27,7 @@ export class DistanceVector implements GraphAlgorithm {
   previousStep() {
     console.log("Previous step dv");
   }
+  getVisitedNodes(){
+    return this.visited;
+  }
 }

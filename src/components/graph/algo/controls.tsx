@@ -14,7 +14,7 @@ import { useAlgorithmStore } from "@/lib/stores/algorithm";
 import { nodesAndEdgesToAdjList } from "@/lib/cn-algorithms/utils";
 
 export function GraphAlgoComponent() {
-  const { isAlgoRunning, setAlgoRunning } = useGraphStore();
+  const { isAlgoRunning, setAlgoRunning, setVisitedNodes } = useGraphStore();
   const { algorithm } = useAlgorithmStore();
   const [algo, setAlgo] = useState<GraphAlgorithm>();
   const { nodes, edges } = useGraphStore();
@@ -54,7 +54,10 @@ export function GraphAlgoComponent() {
           variant={"ghost"}
           size="icon"
           className="w-12 h-12"
-          onClick={() => algo?.nextStep()}
+          onClick={() => {
+            algo?.nextStep();
+            setVisitedNodes(algo?.getVisitedNodes() || new Set());
+          }}
         >
           <ArrowRightIcon className="w-6 h-6" />
         </Button>

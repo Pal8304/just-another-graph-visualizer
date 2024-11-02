@@ -14,7 +14,7 @@ export function GraphAlgoSelector() {
   return (
     <div>
       <Select
-        onValueChange={(value) => {
+        onValueChange={(value: "" | "flooding" | "distance-vector") => {
           setAlgorithm(value);
         }}
       >

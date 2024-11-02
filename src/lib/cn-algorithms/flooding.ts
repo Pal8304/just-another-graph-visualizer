@@ -40,4 +40,7 @@ export class Flooding implements GraphAlgorithm {
   previousStep() {
     console.log("Previous step");
   }
+  getVisitedNodes() {
+    return this.visited;
+  }
 }

@@ -4,4 +4,5 @@ export interface GraphAlgorithm {
   Graph: AdjList;
   nextStep: () => void;
   previousStep: () => void;
+  getVisitedNodes: () => Set<string>;
 }
