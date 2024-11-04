@@ -7,14 +7,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useAlgorithmStore } from "@/lib/stores/algorithm";
+import { AlgorithmStore, useAlgorithmStore } from "@/lib/stores/algorithm";
 
 export function GraphAlgoSelector() {
   const { setAlgorithm } = useAlgorithmStore();
   return (
     <div>
       <Select
-        onValueChange={(value: "" | "flooding" | "distance-vector") => {
+        onValueChange={(value: AlgorithmStore["selectedAlgorithm"]) => {
           setAlgorithm(value);
         }}
       >
