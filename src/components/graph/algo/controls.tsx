@@ -21,12 +21,12 @@ export function GraphAlgoComponent() {
   const { nodes, edges } = useGraphStore();
 
   useEffect(() => {
-    if (algorithm) {
+    if (algorithm && source && destination) {
       setAlgo(
-        new algorithm(nodesAndEdgesToAdjList(nodes, edges), nodes[0], nodes[1]),
+        new algorithm(nodesAndEdgesToAdjList(nodes, edges), source, destination),
       );
     }
-  }, [algorithm, setAlgo, nodes, edges]);
+  }, [algorithm, setAlgo, nodes, edges, source, destination]);
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center gap-4">
