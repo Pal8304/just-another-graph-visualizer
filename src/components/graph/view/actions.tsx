@@ -16,7 +16,7 @@ function ActionButton({ action }: { action: GraphStore["action"] }) {
     <Button
       variant={currentAction === action ? "default" : "outline"}
       onClick={() => setCurrentAction(action)}
-      disabled={isAlgoRunning && currentAction !== "view"}
+      disabled={isAlgoRunning && action !== "view"}
     >
       {action.toString().split("-").join(" ")}
     </Button>

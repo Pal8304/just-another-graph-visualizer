@@ -1,5 +1,5 @@
-import { GraphCanvas } from "@/components/graph/canvas/canvas";
-import { GraphButtons } from "@/components/graph/canvas/actions";
+import { GraphCanvas } from "@/components/graph/view/canvas";
+import { GraphButtons } from "@/components/graph/view/actions";
 import { GraphAlgoComponent } from "@/components/graph/algo/controls";
 import { GraphAlgoSelector } from "@/components/graph/algo/selector";
 
