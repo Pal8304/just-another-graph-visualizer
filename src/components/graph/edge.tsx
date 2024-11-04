@@ -29,7 +29,7 @@ export function Edge(props: Props) {
         y2={props.edge.to.y}
         strokeWidth="2"
         className="stroke-current"
-        // markerEnd="url(#arrowhead)"
+        marker-end="url(#arrowhead)"
       />
       <text
         x={(props.edge.from.x + props.edge.to.x) / 2}

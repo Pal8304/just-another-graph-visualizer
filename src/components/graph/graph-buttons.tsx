@@ -1,22 +1,18 @@
 "use client";
 
 import { GraphStore, useGraphStore } from "@/lib/stores/graph";
-import { Button } from "@/components/ui/button";
+import { Button } from "../ui/button";
 import { AddNodeDialog } from "./add-node-dialog";
 import { AddEdgeDialog } from "./add-edge-dialog";
 
 function ActionButton({ action }: { action: GraphStore["action"] }) {
-  const {
-    action: currentAction,
-    setAction: setCurrentAction,
-    isAlgoRunning,
-  } = useGraphStore();
+  const { action: currentAction, setAction: setCurrentAction } =
+    useGraphStore();
 
   return (
     <Button
       variant={currentAction === action ? "default" : "outline"}
       onClick={() => setCurrentAction(action)}
-      disabled={isAlgoRunning && action !== "view"}
     >
       {action.toString().split("-").join(" ")}
     </Button>
@@ -33,7 +29,7 @@ export function GraphButtons() {
   ];
 
   return (
-    <div className="flex flex-col justify-center w-2/3 p-4 m-4 gap-4 z-30">
+    <div className="flex flex-row justify-center w-2/3 p-4 m-4 gap-4 z-30">
       {actions.map((action) => (
         <ActionButton key={action} action={action} />
       ))}

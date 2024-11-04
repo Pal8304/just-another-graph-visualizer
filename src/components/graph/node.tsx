@@ -12,17 +12,17 @@ export function Node({
   dragEnd: () => void;
 }) {
   const { id, nodeLabel, x, y } = node;
-  const { action, selectedNode, removeNode, setSelectedNode, visitedNodes } = useGraphStore();
+  const { action, selectedNode, removeNode, setSelectedNode } = useGraphStore();
+
   return (
     <div
-      className="text-foreground rounded-full w-8 h-8 flex items-center justify-center z-20 absolute"
+      className="bg-background text-foreground rounded-full w-8 h-8 flex items-center justify-center z-20 absolute"
       style={{
         left: x,
         top: y,
         transform: "translate(-50%, -50%)",
         cursor: action === "view" ? "grab" : "default",
         border: selectedNode?.id === id ? "4px solid green" : "none",
-        backgroundColor: visitedNodes.includes(id) ? "green" : "background",
       }}
       onMouseDown={() => {
         if (action === "view") dragStart();
