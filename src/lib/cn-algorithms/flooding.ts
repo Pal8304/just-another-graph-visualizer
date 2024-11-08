@@ -6,21 +6,27 @@ export class Flooding implements GraphAlgorithm {
   Graph: AdjList;
   sourceNode: GraphNode;
   destinationNode: GraphNode;
-  visited: Set<string>;
+  visited: Set<string> = new Set();
   queue: [node: GraphNode, weight: number][] = [];
+  onEnd: () => void;
+
+  initialize() {
+    this.queue = [[this.sourceNode, 0]];
+    this.visited = new Set();
+  }
 
   constructor(
     Graph: AdjList,
     sourceNode: GraphNode,
-    destinationNode: GraphNode
+    destinationNode: GraphNode,
+    onEnd: () => void,
   ) {
     this.Graph = Graph;
     this.sourceNode = sourceNode;
     this.destinationNode = destinationNode;
-    this.visited = new Set();
-    this.queue.push([sourceNode, 0]);
-    console.log("Flooding instance created");
-    console.log(this.Graph);
+    this.onEnd = onEnd;
+
+    this.initialize();
   }
 
   nextStep() {
@@ -52,7 +58,7 @@ export class Flooding implements GraphAlgorithm {
   }
 
   endAlgorithm() {
-    this.visited = new Set();
-    console.log("End Algorithm");
+    this.onEnd();
+    this.initialize();
   }
 }

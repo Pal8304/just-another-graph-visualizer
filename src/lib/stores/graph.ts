@@ -117,7 +117,7 @@ export const useGraphStore = create(
       },
       setVisitedNodes: (visitedNodes: Set<string>) => {
         set({ visitedNodes: Array.from(visitedNodes) });
-      }
+      },
     }),
     {
       name: "graph-store",

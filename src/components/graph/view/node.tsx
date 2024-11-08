@@ -1,6 +1,11 @@
 "use client";
 
 import { GraphStore, useGraphStore } from "@/lib/stores/graph";
+import { HoverCard, HoverCardTrigger, HoverCardContent } from "@/components/ui/hover-card";
+import { useAlgorithmStore } from "@/lib/stores/algorithm";
+import { Flooding } from "@/lib/cn-algorithms/flooding";
+import { DistanceVector } from "@/lib/cn-algorithms/distance-vector";
+import assert from "assert";
 
 export function Node({
   node,
@@ -12,37 +17,67 @@ export function Node({
   dragEnd: () => void;
 }) {
   const { id, nodeLabel, x, y } = node;
-  const { action, selectedNode, removeNode, setSelectedNode, visitedNodes } = useGraphStore();
+  const { action, selectedNode, removeNode, setSelectedNode, visitedNodes, isAlgoRunning } =
+    useGraphStore();
+  const { selectedAlgorithm, instance } = useAlgorithmStore();
+  let distanceVectors: DistanceVector["distanceVector"] = new Map();
+  if (instance instanceof DistanceVector) {
+    distanceVectors = instance.distanceVector;
+  }
   return (
-    <div
-      className="text-foreground rounded-full w-8 h-8 flex items-center justify-center z-20 absolute"
-      style={{
-        left: x,
-        top: y,
-        transform: "translate(-50%, -50%)",
-        cursor: action === "view" ? "grab" : "default",
-        border: selectedNode?.id === id ? "4px solid green" : "none",
-        backgroundColor: visitedNodes.includes(id) ? "green" : "background",
-      }}
-      onMouseDown={() => {
-        if (action === "view") dragStart();
-      }}
-      onMouseUp={() => {
-        if (action === "view") dragEnd();
-      }}
-      onClick={() => {
-        if (action === "remove-node") {
-          removeNode({ id, nodeLabel, x, y }); // Update to use live position
-        }
-        if (action === "add-edge" || action === "remove-edge") {
-          setSelectedNode({ id, nodeLabel, x, y }); // Update to use live position
-        }
-      }}
-      onDoubleClick={() => {
-        // function to change the node label
-      }}
-    >
-      {nodeLabel}
-    </div>
+    <HoverCard>
+      <HoverCardTrigger asChild>
+      <div
+        className="text-foreground rounded-full w-8 h-8 flex items-center justify-center z-20 absolute"
+        style={{
+          left: x,
+          top: y,
+          transform: "translate(-50%, -50%)",
+          cursor: isAlgoRunning ? "not-allowed" : action === "view" ? "grab" : "default",
+          border: selectedNode?.id === id ? "4px solid green" : "none",
+          backgroundColor: visitedNodes.includes(id) ? "green" : "background",
+        }}
+        onMouseDown={() => {
+          if (action === "view" && !isAlgoRunning) dragStart();
+        }}
+        onMouseUp={() => {
+          if (action === "view" && !isAlgoRunning) dragEnd();
+        }}
+        onClick={() => {
+          if (action === "remove-node") {
+            removeNode({ id, nodeLabel, x, y }); // Update to use live position
+          }
+          if (action === "add-edge" || action === "remove-edge") {
+            setSelectedNode({ id, nodeLabel, x, y }); // Update to use live position
+          }
+        }}
+        onDoubleClick={() => {
+          // function to change the node label
+        }}
+      >
+        {nodeLabel}
+      </div></HoverCardTrigger>
+      <HoverCardContent>{
+        selectedAlgorithm === "flooding" ? (
+          <>No info available</>
+        ) : selectedAlgorithm === "distance-vector" ? (
+            <div>
+              {distanceVectors.has(id) ? (
+                <div>
+                  {Array.from(distanceVectors.get(id)!.entries()).map(([nodeId, distance]) => (
+                    <div key={nodeId}>
+                      {nodeId}: {distance}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div>No info available</div>
+              )}
+            </div>
+          ) : ( <div>
+              <div>Node ID: {id}</div>
+            </div> )
+      }</HoverCardContent>
+    </HoverCard>
   );
 }

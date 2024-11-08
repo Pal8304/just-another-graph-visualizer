@@ -16,16 +16,17 @@ export function GraphCanvas() {
     addNode,
     updateNodePosition,
     setAction,
+    isAlgoRunning
   } = useGraphStore();
   const [currentDraggingNode, setCurrentDraggingNode] = useState<
     string | null
   >();
 
   useEffect(() => {
-    if (currentDraggingNode) {
+    if (currentDraggingNode && !isAlgoRunning) {
       updateNodePosition(currentDraggingNode, x, y);
     }
-  }, [x, y, currentDraggingNode, updateNodePosition]);
+  }, [x, y, currentDraggingNode, updateNodePosition, isAlgoRunning]);
 
   return (
     <div

@@ -6,19 +6,18 @@ export class DistanceVector implements GraphAlgorithm {
   Graph: AdjList;
   sourceNode: GraphNode;
   destinationNode: GraphNode;
-  visited: Set<string>;
+  visited: Set<string> = new Set();
   queue: [node: string][] = [];
-  distanceVector: Map<string, Map<string, [number, string | null]>> = new Map(); // node -> [node -> [distance, nextHop]]
+  public distanceVector: Map<string, Map<string, [number, string | null]>> = new Map(); // node -> [node -> [distance, nextHop]]
   distanceVectorCreated: boolean = false;
-  constructor(
-    Graph: AdjList,
-    sourceNode: GraphNode,
-    destinationNode: GraphNode
-  ) {
-    this.Graph = Graph;
-    this.sourceNode = sourceNode;
-    this.destinationNode = destinationNode;
+  onEnd: () => void;
+
+  initialize() {
+    this.queue = [];
     this.visited = new Set();
+    this.distanceVector = new Map();
+    this.distanceVectorCreated = false;
+
     const nodes = Array.from(this.Graph.keys());
     for (const node of nodes) {
       this.queue.push([node]);
@@ -31,8 +30,21 @@ export class DistanceVector implements GraphAlgorithm {
           .set(node2, node === node2 ? [0, null] : [Infinity, null]);
       }
     }
-    console.log("DistanceVector instance created");
-    console.log(this.Graph);
+  }
+
+  constructor(
+    Graph: AdjList,
+    sourceNode: GraphNode,
+    destinationNode: GraphNode,
+    onEnd: () => void,
+  ) {
+    this.Graph = Graph;
+    this.sourceNode = sourceNode;
+    this.destinationNode = destinationNode;
+    this.distanceVector = new Map();
+    this.onEnd = onEnd;
+
+    this.initialize();
   }
   nextStep() {
     console.log("Next step dv");
@@ -103,7 +115,7 @@ export class DistanceVector implements GraphAlgorithm {
     return this.visited;
   }
   endAlgorithm() {
-    this.visited = new Set();
-    console.log("End Algorithm");
+    this.onEnd();
+    this.initialize();
   }
 }

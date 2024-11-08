@@ -12,54 +12,73 @@ import {
 import { GraphAlgorithm } from "@/lib/cn-algorithms/graph-algorithm";
 import { useAlgorithmStore } from "@/lib/stores/algorithm";
 import { nodesAndEdgesToAdjList } from "@/lib/cn-algorithms/utils";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { toast } from "sonner";
+import assert from "assert";
 
 export function GraphAlgoComponent() {
   const { isAlgoRunning, setAlgoRunning, setVisitedNodes } = useGraphStore();
-  const { algorithm, source, setSource, destination, setDestination } = useAlgorithmStore();
-  const [algo, setAlgo] = useState<GraphAlgorithm>();
+  const { algorithm, selectedAlgorithm, source, setSource, destination, setDestination, instance: algo, setInstance: setAlgo, setAlgorithm } =
+    useAlgorithmStore();
   const { nodes, edges } = useGraphStore();
 
   useEffect(() => {
+    if (!algorithm && selectedAlgorithm) {
+      setAlgorithm(selectedAlgorithm);
+    }
     if (algorithm && source && destination) {
       setAlgo(
-        new algorithm(nodesAndEdgesToAdjList(nodes, edges), source, destination),
+        new algorithm(
+          nodesAndEdgesToAdjList(nodes, edges),
+          source,
+          destination,
+          () => {
+            setAlgoRunning(false);
+            toast.success("Algorithm has finished running");
+          },
+        ),
       );
     }
-  }, [algorithm, setAlgo, nodes, edges, source, destination]);
+  }, [algorithm, setAlgo, setAlgoRunning, nodes, edges, source, destination, setAlgorithm, selectedAlgorithm]);
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center gap-4">
       <div className="flex gap-2">
-        <Select value={source?.id} onValueChange={(sourceId) => {
-          setSource(nodes.find((node) => node.id === sourceId)!);
-        }}>
+        <Select
+          value={source?.id}
+          onValueChange={(sourceId) => {
+            setSource(nodes.find((node) => node.id === sourceId)!);
+          }}
+        >
           <SelectTrigger>
             <SelectValue placeholder="Source Node" />
           </SelectTrigger>
           <SelectContent>
             {nodes.map((node) => (
-              <SelectItem
-                key={node.id}
-                value={node.id}
-              >
+              <SelectItem key={node.id} value={node.id}>
                 {node.nodeLabel}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
-        <Select value={destination?.id} onValueChange={(sourceId) => {
-          setDestination(nodes.find((node) => node.id === sourceId)!);
-        }}>
+        <Select
+          value={destination?.id}
+          onValueChange={(sourceId) => {
+            setDestination(nodes.find((node) => node.id === sourceId)!);
+          }}
+        >
           <SelectTrigger>
             <SelectValue placeholder="Destination Node" />
           </SelectTrigger>
           <SelectContent>
             {nodes.map((node) => (
-              <SelectItem
-                key={node.id}
-                value={node.id}
-              >
+              <SelectItem key={node.id} value={node.id}>
                 {node.nodeLabel}
               </SelectItem>
             ))}
@@ -79,14 +98,22 @@ export function GraphAlgoComponent() {
         <Button
           size="icon"
           className="w-12 h-12"
-          onClick={() => setAlgoRunning(!isAlgoRunning)}
+          onClick={() => {
+            if (isAlgoRunning) {
+              assert(algo !== undefined && algo !== null);
+              console.log(algo);
+              algo.endAlgorithm();
+              setVisitedNodes(new Set());
+            }
+            setAlgoRunning(!isAlgoRunning);
+          }}
           disabled={!algo || !source || !destination}
         >
           {!isAlgoRunning ? (
             <PlayIcon className="w-6 h-6" />
           ) : (
-              <StopIcon className="w-6 h-6" />
-            )}
+            <StopIcon className="w-6 h-6" />
+          )}
         </Button>
         <Button
           variant={"ghost"}
