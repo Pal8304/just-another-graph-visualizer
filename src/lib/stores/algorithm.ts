@@ -52,9 +52,10 @@ export const useAlgorithmStore = create(
         if (nameToAlgo[selectedAlgorithm])
           set({ algorithm: nameToAlgo[selectedAlgorithm] });
       },
-      setInstance: (instance) => set({
-        instance,
-      }),
+      setInstance: (instance) =>
+        set({
+          instance,
+        }),
     }),
     {
       name: "algo-store",

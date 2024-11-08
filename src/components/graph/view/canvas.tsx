@@ -16,7 +16,7 @@ export function GraphCanvas() {
     addNode,
     updateNodePosition,
     setAction,
-    isAlgoRunning
+    isAlgoRunning,
   } = useGraphStore();
   const [currentDraggingNode, setCurrentDraggingNode] = useState<
     string | null

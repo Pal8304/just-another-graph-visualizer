@@ -24,8 +24,17 @@ import assert from "assert";
 
 export function GraphAlgoComponent() {
   const { isAlgoRunning, setAlgoRunning, setVisitedNodes } = useGraphStore();
-  const { algorithm, selectedAlgorithm, source, setSource, destination, setDestination, instance: algo, setInstance: setAlgo, setAlgorithm } =
-    useAlgorithmStore();
+  const {
+    algorithm,
+    selectedAlgorithm,
+    source,
+    setSource,
+    destination,
+    setDestination,
+    instance: algo,
+    setInstance: setAlgo,
+    setAlgorithm,
+  } = useAlgorithmStore();
   const { nodes, edges } = useGraphStore();
 
   useEffect(() => {
@@ -45,7 +54,17 @@ export function GraphAlgoComponent() {
         ),
       );
     }
-  }, [algorithm, setAlgo, setAlgoRunning, nodes, edges, source, destination, setAlgorithm, selectedAlgorithm]);
+  }, [
+    algorithm,
+    setAlgo,
+    setAlgoRunning,
+    nodes,
+    edges,
+    source,
+    destination,
+    setAlgorithm,
+    selectedAlgorithm,
+  ]);
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center gap-4">

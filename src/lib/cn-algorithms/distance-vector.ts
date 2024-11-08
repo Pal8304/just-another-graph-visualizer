@@ -8,7 +8,8 @@ export class DistanceVector implements GraphAlgorithm {
   destinationNode: GraphNode;
   visited: Set<string> = new Set();
   queue: [node: string][] = [];
-  public distanceVector: Map<string, Map<string, [number, string | null]>> = new Map(); // node -> [node -> [distance, nextHop]]
+  public distanceVector: Map<string, Map<string, [number, string | null]>> =
+    new Map(); // node -> [node -> [distance, nextHop]]
   distanceVectorCreated: boolean = false;
   onEnd: () => void;
 
