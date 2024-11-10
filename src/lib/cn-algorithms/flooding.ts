@@ -7,6 +7,7 @@ export class Flooding implements GraphAlgorithm {
   sourceNode: GraphNode;
   destinationNode: GraphNode;
   visited: Set<string> = new Set();
+  visitedEdges: Set<{ from: string; to: string, weight: number | null}> = new Set();
   queue: [node: GraphNode, weight: number][] = [];
   onEnd: () => void;
 
@@ -55,6 +56,10 @@ export class Flooding implements GraphAlgorithm {
 
   getVisitedNodes() {
     return this.visited;
+  }
+
+  getVisitedEdges(){
+    return this.visitedEdges;
   }
 
   endAlgorithm() {

@@ -7,9 +7,7 @@ import {
   HoverCardContent,
 } from "@/components/ui/hover-card";
 import { useAlgorithmStore } from "@/lib/stores/algorithm";
-import { Flooding } from "@/lib/cn-algorithms/flooding";
 import { DistanceVector } from "@/lib/cn-algorithms/distance-vector";
-import assert from "assert";
 
 export function Node({
   node,
@@ -24,6 +22,7 @@ export function Node({
   const {
     action,
     selectedNode,
+    nodes,
     removeNode,
     setSelectedNode,
     visitedNodes,
@@ -46,8 +45,8 @@ export function Node({
             cursor: isAlgoRunning
               ? "not-allowed"
               : action === "view"
-                ? "grab"
-                : "default",
+              ? "grab"
+              : "default",
             border: selectedNode?.id === id ? "4px solid green" : "none",
             backgroundColor: visitedNodes.includes(id) ? "green" : "background",
           }}
@@ -82,9 +81,11 @@ export function Node({
                 {Array.from(distanceVectors.get(id)!.entries()).map(
                   ([nodeId, distance]) => (
                     <div key={nodeId}>
-                      {nodeId}: {distance}
+                      {
+                        nodes.find((node) => node.id === nodeId)?.nodeLabel
+                      }: {distance[0]}
                     </div>
-                  ),
+                  )
                 )}
               </div>
             ) : (

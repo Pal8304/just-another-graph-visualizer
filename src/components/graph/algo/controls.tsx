@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useGraphStore } from "@/lib/stores/graph";
 import {
@@ -9,7 +9,6 @@ import {
   PlayIcon,
   StopIcon,
 } from "@radix-ui/react-icons";
-import { GraphAlgorithm } from "@/lib/cn-algorithms/graph-algorithm";
 import { useAlgorithmStore } from "@/lib/stores/algorithm";
 import { nodesAndEdgesToAdjList } from "@/lib/cn-algorithms/utils";
 import {
@@ -50,8 +49,8 @@ export function GraphAlgoComponent() {
           () => {
             setAlgoRunning(false);
             toast.success("Algorithm has finished running");
-          },
-        ),
+          }
+        )
       );
     }
   }, [

@@ -7,7 +7,9 @@ export class DistanceVector implements GraphAlgorithm {
   sourceNode: GraphNode;
   destinationNode: GraphNode;
   visited: Set<string> = new Set();
-  queue: [node: string][] = [];
+  visitedEdges: Set<{ from: string; to: string; weight: number | null }> =
+    new Set();
+  queue: [{ node: string; parent: string }][] = [];
   public distanceVector: Map<string, Map<string, [number, string | null]>> =
     new Map(); // node -> [node -> [distance, nextHop]]
   distanceVectorCreated: boolean = false;
@@ -21,7 +23,7 @@ export class DistanceVector implements GraphAlgorithm {
 
     const nodes = Array.from(this.Graph.keys());
     for (const node of nodes) {
-      this.queue.push([node]);
+      this.queue.push([{ node, parent: "" }]);
     }
     for (const node of nodes) {
       this.distanceVector.set(node, new Map());
@@ -37,7 +39,7 @@ export class DistanceVector implements GraphAlgorithm {
     Graph: AdjList,
     sourceNode: GraphNode,
     destinationNode: GraphNode,
-    onEnd: () => void,
+    onEnd: () => void
   ) {
     this.Graph = Graph;
     this.sourceNode = sourceNode;
@@ -52,7 +54,7 @@ export class DistanceVector implements GraphAlgorithm {
     if (this.queue.length === 0 && !this.distanceVectorCreated) {
       console.log("Distance Vectors are calculated");
       this.distanceVectorCreated = true;
-      this.queue.push([this.sourceNode.id]);
+      this.queue.push([{ node: this.sourceNode.id, parent: "" }]);
       return;
     }
     if (this.queue.length === 0 && this.distanceVectorCreated) {
@@ -61,7 +63,9 @@ export class DistanceVector implements GraphAlgorithm {
       return;
     }
     if (!this.distanceVectorCreated) {
-      const currentNode = this.queue.shift()![0];
+      const queueNode = this.queue.shift()![0];
+      const currentNode = queueNode.node;
+      const parent = queueNode.parent;
       console.log(currentNode);
       const neighbors = this.Graph.get(currentNode);
       if (!neighbors) return;
@@ -79,7 +83,7 @@ export class DistanceVector implements GraphAlgorithm {
             this.distanceVector
               .get(currentNode)!
               .set(node, [weight + adjacentDistance, adjacentNodeID]);
-            this.queue.push([currentNode]);
+            this.queue.push([{ node: currentNode, parent }]);
           } else if (
             adjacentDistance !== Infinity &&
             weight + adjacentDistance < currentDistance
@@ -87,12 +91,12 @@ export class DistanceVector implements GraphAlgorithm {
             this.distanceVector
               .get(currentNode)!
               .set(node, [weight + adjacentDistance, adjacentNodeID]);
-            this.queue.push([currentNode]);
+            this.queue.push([{ node: currentNode, parent }]);
           }
         }
       }
     } else {
-      const currentNode = this.queue.shift()![0];
+      const currentNode = this.queue.shift()![0].node;
       this.visited.add(currentNode);
       if (currentNode === this.destinationNode.id) {
         console.log("Destination node reached");
@@ -103,7 +107,7 @@ export class DistanceVector implements GraphAlgorithm {
         .get(currentNode)!
         .get(this.destinationNode.id)![1];
       if (nextHop !== null) {
-        this.queue.push([nextHop]);
+        this.queue.push([{ node: nextHop, parent: currentNode }]);
       }
       console.log("Current Node: ", currentNode, "Next Hop: ", nextHop);
     }
@@ -114,6 +118,9 @@ export class DistanceVector implements GraphAlgorithm {
   }
   getVisitedNodes() {
     return this.visited;
+  }
+  getVisitedEdges() {
+    return this.visitedEdges;
   }
   endAlgorithm() {
     this.onEnd();

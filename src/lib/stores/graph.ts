@@ -24,6 +24,7 @@ interface State {
   action: "view" | "add-node" | "remove-node" | "add-edge" | "remove-edge";
   isAlgoRunning: boolean;
   visitedNodes: string[];
+  visitedEdges: GraphEdge[];
 }
 
 interface Actions {
@@ -38,6 +39,7 @@ interface Actions {
   updateNodePosition: (id: string, x: number, y: number) => void;
   setAlgoRunning: (running: boolean) => void;
   setVisitedNodes: (visitedNodes: Set<string>) => void;
+  setVisitedEdges: (visitedEdges: GraphEdge[]) => void;
 }
 
 export type GraphStore = State & Actions;
@@ -53,6 +55,7 @@ export const useGraphStore = create(
       edgeToAdd: null,
       isAlgoRunning: false,
       visitedNodes: [],
+      visitedEdges: [],
       addEdge: (edge: GraphEdge) => {
         set(({ edges }) => ({
           edges: [...edges, edge],
@@ -61,9 +64,16 @@ export const useGraphStore = create(
       removeEdge: (from: GraphNode, to: GraphNode) => {
         // might have to change this to removeEdge: (edge: Edge) cause of multiple edges
         set(({ edges }) => ({
-          edges: edges.filter(
-            (edge) => edge.from.id !== from.id || edge.to.id !== to.id,
-          ),
+          edges: edges.filter((edge) => {
+            if (edge.directed) {
+              return edge.from.id !== from.id || edge.to.id !== to.id;
+            } else {
+              return (
+                (edge.from.id !== from.id || edge.to.id !== to.id) &&
+                (edge.from.id !== to.id || edge.to.id !== from.id)
+              );
+            }
+          }),
         }));
       },
       setNodeToAdd: (node: GraphNode) => set({ nodeToAdd: node }),
@@ -93,7 +103,7 @@ export const useGraphStore = create(
         set(({ nodes, edges }) => ({
           nodes: nodes.filter((n) => n.id !== node.id),
           edges: edges.filter(
-            (edge) => edge.from.id !== node.id && edge.to.id !== node.id,
+            (edge) => edge.from.id !== node.id && edge.to.id !== node.id
           ),
         }));
       },
@@ -103,7 +113,7 @@ export const useGraphStore = create(
       updateNodePosition: (id: string, x: number, y: number) => {
         set(({ nodes, edges }) => ({
           nodes: nodes.map((node) =>
-            node.id === id ? { ...node, x, y } : node,
+            node.id === id ? { ...node, x, y } : node
           ),
           edges: edges.map((edge) => ({
             ...edge,
@@ -118,9 +128,12 @@ export const useGraphStore = create(
       setVisitedNodes: (visitedNodes: Set<string>) => {
         set({ visitedNodes: Array.from(visitedNodes) });
       },
+      setVisitedEdges: (visitedEdges: GraphEdge[]) => {
+        set({ visitedEdges });
+      },
     }),
     {
       name: "graph-store",
-    },
-  ),
+    }
+  )
 );

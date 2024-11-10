@@ -1,12 +1,13 @@
 "use client";
 
-import { GraphStore } from "@/lib/stores/graph";
+import { GraphStore, useGraphStore } from "@/lib/stores/graph";
 
 interface Props {
   edge: GraphStore["edges"][number];
 }
 
 export function Edge(props: Props) {
+  const { visitedEdges } = useGraphStore();
   return (
     <g>
       {/* <defs>
@@ -28,7 +29,17 @@ export function Edge(props: Props) {
         x2={props.edge.to.x}
         y2={props.edge.to.y}
         strokeWidth="2"
-        className="stroke-current"
+        style={
+          // props.edge.weight === 1
+          //   ? { stroke: "black" }
+          //   : { stroke: "black", strokeDasharray: "5,5" }
+          visitedEdges.includes(props.edge) ? {
+            stroke: "currentcolor"
+          } : {
+            stroke: "currentcolor",
+            strokeDasharray: "5,5"
+          }
+        }
         // markerEnd="url(#arrowhead)"
       />
       <text
