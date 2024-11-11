@@ -132,6 +132,14 @@ export class DistanceVector implements GraphAlgorithm {
       this.visited.add(currentNode);
       if (currentNode === this.destinationNode.id) {
         console.log("Destination node reached");
+        this.visited.add(currentNode);
+        this.visitedEdges.add(
+          this.edges.find(
+            (edge) =>
+              (edge.from.id === currentNode && edge.to.id === parent) || 
+              (edge.to.id === currentNode && edge.from.id === parent)
+          )!.id
+        )
         this.endAlgorithm();
         return;
       }
@@ -157,6 +165,6 @@ export class DistanceVector implements GraphAlgorithm {
   }
   endAlgorithm() {
     this.onEnd();
-    this.initialize();
+    setTimeout(() => this.initialize(), 10);
   }
 }

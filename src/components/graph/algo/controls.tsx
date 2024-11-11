@@ -117,11 +117,11 @@ export function GraphAlgoComponent() {
           size="icon"
           className="w-12 h-12"
           onClick={() => {
+            setVisitedNodes(new Set());
+            setVisitedEdges(new Set());
             if (isAlgoRunning) {
               assert(algo !== undefined && algo !== null);
-              console.log(algo);
               algo.endAlgorithm();
-              setVisitedNodes(new Set());
             }
             setAlgoRunning(!isAlgoRunning);
           }}

@@ -39,6 +39,11 @@ export class Flooding implements GraphAlgorithm {
     const [node, parent, currrentweight] = this.queue.shift()!;
     if (node.id === this.destinationNode.id) {
       console.log("Found destination node");
+      this.visited.add(node.id);
+      console.log(node, parent);
+      this.visitedEdges.add(this.edges.find(
+        (edge) => (edge.from.id === node.id && edge.to.id === parent?.id) || (edge.from.id === parent?.id && edge.to.id === node.id)
+      )!.id);
       this.endAlgorithm();
       return;
     }
@@ -80,6 +85,6 @@ export class Flooding implements GraphAlgorithm {
 
   endAlgorithm() {
     this.onEnd();
-    this.initialize();
+    setTimeout(() => this.initialize(), 10);
   }
 }
