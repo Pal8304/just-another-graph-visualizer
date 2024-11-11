@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/hover-card";
 import { useAlgorithmStore } from "@/lib/stores/algorithm";
 import { DistanceVector } from "@/lib/cn-algorithms/distance-vector";
+import { Flooding } from "@/lib/cn-algorithms/flooding";
 
 export function Node({
   node,
@@ -30,8 +31,12 @@ export function Node({
   } = useGraphStore();
   const { selectedAlgorithm, instance } = useAlgorithmStore();
   let distanceVectors: DistanceVector["distanceVector"] = new Map();
+  let parentMap: Flooding["parentMap"] = new Map();
   if (instance instanceof DistanceVector) {
     distanceVectors = instance.distanceVector;
+  }
+  if (instance instanceof Flooding) {
+    parentMap = instance.getParentMap();
   }
   return (
     <HoverCard>
@@ -73,7 +78,7 @@ export function Node({
       </HoverCardTrigger>
       <HoverCardContent>
         {selectedAlgorithm === "flooding" ? (
-          <>No info available</>
+          <div>Parent: {nodes.find((n) => n.id === parentMap.get(node.id))?.nodeLabel || "-"}</div>
         ) : selectedAlgorithm === "distance-vector" ? (
           <div>
             {distanceVectors.has(id) ? (
@@ -89,7 +94,7 @@ export function Node({
                 )}
               </div>
             ) : (
-              <div>No info available</div>
+                  <>No info available</>
             )}
           </div>
         ) : (

@@ -11,6 +11,7 @@ export class Flooding implements GraphAlgorithm {
   queue: [node: GraphNode, parent: GraphNode | null, weight: number][] = [];
   edges: GraphEdge[] = [];
   onEnd: () => void;
+  parentMap: Map<string, string> = new Map();
 
   initialize() {
     this.queue = [[this.sourceNode, null, 0]];
@@ -37,6 +38,7 @@ export class Flooding implements GraphAlgorithm {
     if (this.queue.length === 0) return;
     this.queue.sort((a, b) => a[2] - b[2]);
     const [node, parent, currrentweight] = this.queue.shift()!;
+    this.parentMap.set(node.id, parent?.id || "");
     if (node.id === this.destinationNode.id) {
       console.log("Found destination node");
       this.visited.add(node.id);
@@ -77,6 +79,10 @@ export class Flooding implements GraphAlgorithm {
 
   getVisitedNodes() {
     return this.visited;
+  }
+
+  getParentMap() {
+    return this.parentMap;
   }
 
   getVisitedEdges() {
