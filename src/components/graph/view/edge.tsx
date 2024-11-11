@@ -45,7 +45,7 @@ export function Edge(props: Props) {
       <text
         x={(props.edge.from.x + props.edge.to.x) / 2}
         y={(props.edge.from.y + props.edge.to.y) / 2}
-        className="text-xs fill-current"
+        className="text-lg fill-current font-bold"
       >
         {props.edge.weight}
       </text>

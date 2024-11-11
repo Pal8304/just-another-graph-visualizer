@@ -40,7 +40,7 @@ export function GraphAlgoComponent() {
     if (!algorithm && selectedAlgorithm) {
       setAlgorithm(selectedAlgorithm);
     }
-    if (algorithm && source && destination) {
+    if (algorithm && source && destination && isAlgoRunning) {
       setAlgo(
         new algorithm(
           nodesAndEdgesToAdjList(nodes, edges),
@@ -56,6 +56,7 @@ export function GraphAlgoComponent() {
   }, [
     algorithm,
     setAlgo,
+    isAlgoRunning,
     setAlgoRunning,
     nodes,
     edges,

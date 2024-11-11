@@ -15,24 +15,15 @@ export class DistanceVector implements GraphAlgorithm {
   distanceVectorCreated: boolean = false;
   edges: GraphEdge[] = [];
   onEnd: () => void;
+
   initialize() {
     this.queue = [];
     this.visited = new Set();
     this.visitedEdges = new Set();
-    this.distanceVector = new Map();
-    this.distanceVectorCreated = false;
     this.edges = useGraphStore.getState().edges;
     const nodes = Array.from(this.Graph.keys());
     for (const node of nodes) {
       this.queue.push([{ node, parent: "" }]);
-    }
-    for (const node of nodes) {
-      this.distanceVector.set(node, new Map());
-      for (const node2 of nodes) {
-        this.distanceVector
-          .get(node)!
-          .set(node2, node === node2 ? [0, null] : [Infinity, null]);
-      }
     }
   }
 
@@ -45,7 +36,17 @@ export class DistanceVector implements GraphAlgorithm {
     this.Graph = Graph;
     this.sourceNode = sourceNode;
     this.destinationNode = destinationNode;
+    this.distanceVectorCreated = false;
     this.distanceVector = new Map();
+    const nodes = Array.from(this.Graph.keys());
+    for (const node of nodes) {
+      this.distanceVector.set(node, new Map());
+      for (const node2 of nodes) {
+        this.distanceVector
+          .get(node)!
+          .set(node2, node === node2 ? [0, null] : [Infinity, null]);
+      }
+    }
     this.onEnd = onEnd;
 
     this.initialize();
