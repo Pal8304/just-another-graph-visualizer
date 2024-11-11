@@ -9,6 +9,7 @@ export interface GraphNode {
 }
 
 export interface GraphEdge {
+  id: string;
   directed: boolean;
   from: GraphNode;
   to: GraphNode;
@@ -24,7 +25,7 @@ interface State {
   action: "view" | "add-node" | "remove-node" | "add-edge" | "remove-edge";
   isAlgoRunning: boolean;
   visitedNodes: string[];
-  visitedEdges: GraphEdge[];
+  visitedEdges: string[];
 }
 
 interface Actions {
@@ -39,7 +40,7 @@ interface Actions {
   updateNodePosition: (id: string, x: number, y: number) => void;
   setAlgoRunning: (running: boolean) => void;
   setVisitedNodes: (visitedNodes: Set<string>) => void;
-  setVisitedEdges: (visitedEdges: GraphEdge[]) => void;
+  setVisitedEdges: (visitedEdges:Set<string>) => void;
 }
 
 export type GraphStore = State & Actions;
@@ -85,6 +86,7 @@ export const useGraphStore = create(
             console.log("Not the same node");
             if (action === "add-edge")
               setEdgeToAdd({
+                id: crypto.randomUUID(),
                 directed: false,
                 from: selectedNode,
                 to: node,
@@ -128,9 +130,9 @@ export const useGraphStore = create(
       setVisitedNodes: (visitedNodes: Set<string>) => {
         set({ visitedNodes: Array.from(visitedNodes) });
       },
-      setVisitedEdges: (visitedEdges: GraphEdge[]) => {
-        set({ visitedEdges });
-      },
+      setVisitedEdges: (visitedEdges: Set<string>) => {
+        set({visitedEdges: Array.from(visitedEdges)});
+      }
     }),
     {
       name: "graph-store",

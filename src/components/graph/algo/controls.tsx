@@ -22,7 +22,7 @@ import { toast } from "sonner";
 import assert from "assert";
 
 export function GraphAlgoComponent() {
-  const { isAlgoRunning, setAlgoRunning, setVisitedNodes } = useGraphStore();
+  const { isAlgoRunning, setAlgoRunning, setVisitedNodes, setVisitedEdges } = useGraphStore();
   const {
     algorithm,
     selectedAlgorithm,
@@ -140,6 +140,7 @@ export function GraphAlgoComponent() {
           onClick={() => {
             algo?.nextStep();
             setVisitedNodes(algo?.getVisitedNodes() || new Set());
+            setVisitedEdges(algo?.getVisitedEdges() || new Set());
           }}
           disabled={!isAlgoRunning}
         >

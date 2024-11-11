@@ -1,4 +1,4 @@
-import { GraphNode } from "../stores/graph";
+import { GraphNode, GraphEdge, useGraphStore } from "../stores/graph";
 import { GraphAlgorithm } from "./graph-algorithm";
 import { AdjList } from "./utils";
 
@@ -7,20 +7,23 @@ export class Flooding implements GraphAlgorithm {
   sourceNode: GraphNode;
   destinationNode: GraphNode;
   visited: Set<string> = new Set();
-  visitedEdges: Set<{ from: string; to: string, weight: number | null}> = new Set();
-  queue: [node: GraphNode, weight: number][] = [];
+  visitedEdges: Set<string> = new Set();
+  queue: [node: GraphNode, parent: GraphNode | null, weight: number][] = [];
+  edges: GraphEdge[] = [];
   onEnd: () => void;
 
   initialize() {
-    this.queue = [[this.sourceNode, 0]];
+    this.queue = [[this.sourceNode, null, 0]];
     this.visited = new Set();
+    this.visitedEdges = new Set();
+    this.edges = useGraphStore.getState().edges;
   }
 
   constructor(
     Graph: AdjList,
     sourceNode: GraphNode,
     destinationNode: GraphNode,
-    onEnd: () => void,
+    onEnd: () => void
   ) {
     this.Graph = Graph;
     this.sourceNode = sourceNode;
@@ -32,19 +35,32 @@ export class Flooding implements GraphAlgorithm {
 
   nextStep() {
     if (this.queue.length === 0) return;
-    this.queue.sort((a, b) => a[1] - b[1]);
-    const [node, currrentweight] = this.queue.shift()!;
+    this.queue.sort((a, b) => a[2] - b[2]);
+    const [node, parent, currrentweight] = this.queue.shift()!;
     if (node.id === this.destinationNode.id) {
       console.log("Found destination node");
       this.endAlgorithm();
       return;
+    }
+    const edge = this.edges.find(
+      (edge) => {
+        if(edge.directed){
+          return (edge.from.id === node.id && edge.to.id === parent?.id);
+        }
+        else{
+          return (edge.from.id === node.id && edge.to.id === parent?.id) || (edge.from.id === parent?.id && edge.to.id === node.id);
+        }
+      }
+    )
+    if (edge) {
+      this.visitedEdges.add(edge.id);
     }
     if (this.visited.has(node.id)) return;
     this.visited.add(node.id);
     if (this.Graph.has(node.id)) {
       for (const [adjacentNode, weight] of this.Graph.get(node.id) || []) {
         if (!this.visited.has(adjacentNode.id)) {
-          this.queue.push([adjacentNode, weight + currrentweight]);
+          this.queue.push([adjacentNode, node ,weight + currrentweight]);
         }
       }
     }
@@ -58,7 +74,7 @@ export class Flooding implements GraphAlgorithm {
     return this.visited;
   }
 
-  getVisitedEdges(){
+  getVisitedEdges() {
     return this.visitedEdges;
   }
 
