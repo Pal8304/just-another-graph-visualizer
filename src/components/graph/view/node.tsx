@@ -88,13 +88,13 @@ export function Node({
                     <div key={nodeId}>
                       {
                         nodes.find((node) => node.id === nodeId)?.label
-                      }: {distance[0]}
+                      }: {distance[0]} via {nodes.find((node) => node.id === distance[1])?.label || "-"}
                     </div>
                   )
                 )}
               </div>
             ) : (
-                  <>No info available</>
+              <>No info available</>
             )}
           </div>
         ) : (

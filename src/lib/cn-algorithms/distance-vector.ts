@@ -161,6 +161,14 @@ export class DistanceVector implements GraphAlgorithm {
     }
     console.log(this.distanceVector);
   }
+  calculateAllDistanceVectors() {
+    this.queue.push([{ node: this.sourceNode.id, parent: "" }]);
+
+    while (this.queue.length > 0 && !this.distanceVectorCreated) {
+      this.nextStep();
+    }
+    this.nextStep();
+  }
   previousStep() {
     console.log("Previous step dv");
   }

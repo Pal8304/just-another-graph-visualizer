@@ -20,6 +20,8 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import assert from "assert";
+import { DistanceVector } from "@/lib/cn-algorithms/distance-vector";
+import { SkipForwardIcon } from "lucide-react";
 
 export function GraphAlgoComponent() {
   const { isAlgoRunning, setAlgoRunning, setVisitedNodes, setVisitedEdges } = useGraphStore();
@@ -107,7 +109,7 @@ export function GraphAlgoComponent() {
         </Select>
       </div>
       <div className="flex flex-row items-center justify-between">
-        <Button
+        {/*<Button
           variant={"ghost"}
           size="icon"
           className="w-12 h-12"
@@ -115,7 +117,7 @@ export function GraphAlgoComponent() {
           disabled={!isAlgoRunning}
         >
           <ArrowLeftIcon className="w-6 h-6" />
-        </Button>
+        </Button>*/}
         <Button
           size="icon"
           className="w-12 h-12"
@@ -149,6 +151,20 @@ export function GraphAlgoComponent() {
         >
           <ArrowRightIcon className="w-6 h-6" />
         </Button>
+        { (algo instanceof DistanceVector && isAlgoRunning) &&
+        <Button
+          variant={"ghost"}
+          size="icon"
+          className="w-12 h-12"
+          onClick={() => {
+            assert(algo instanceof DistanceVector);
+            algo.calculateAllDistanceVectors();
+            setVisitedNodes(algo?.getVisitedNodes() || new Set());
+            setVisitedEdges(algo?.getVisitedEdges() || new Set());
+          }}
+        >
+          <SkipForwardIcon className="w-6 h-6" />
+        </Button>}
       </div>
     </div>
   );
