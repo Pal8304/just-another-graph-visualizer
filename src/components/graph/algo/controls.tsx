@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useGraphStore } from "@/lib/stores/graph";
 import {
-  ArrowLeftIcon,
   ArrowRightIcon,
   PlayIcon,
   StopIcon,
@@ -43,7 +42,7 @@ export function GraphAlgoComponent() {
     if (!algorithm && selectedAlgorithm) {
       setAlgorithm(selectedAlgorithm);
     }
-    if (algorithm && source && destination && isAlgoRunning) {
+    if (algorithm && source && destination) {
       setAlgo(
         new algorithm(
           nodesAndEdgesToAdjList(nodes, edges),
