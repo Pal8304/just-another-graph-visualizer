@@ -19,7 +19,7 @@ export function Node({
   dragStart: () => void;
   dragEnd: () => void;
 }) {
-  const { id, nodeLabel, x, y } = node;
+  const { id, label: nodeLabel, x, y } = node;
   const {
     action,
     selectedNode,
@@ -63,10 +63,10 @@ export function Node({
           }}
           onClick={() => {
             if (action === "remove-node") {
-              removeNode({ id, nodeLabel, x, y }); // Update to use live position
+              removeNode({ id, label: nodeLabel, x, y }); // Update to use live position
             }
             if (action === "add-edge" || action === "remove-edge") {
-              setSelectedNode({ id, nodeLabel, x, y }); // Update to use live position
+              setSelectedNode({ id, label: nodeLabel, x, y }); // Update to use live position
             }
           }}
           onDoubleClick={() => {
@@ -78,7 +78,7 @@ export function Node({
       </HoverCardTrigger>
       <HoverCardContent>
         {selectedAlgorithm === "flooding" ? (
-          <div>Parent: {nodes.find((n) => n.id === parentMap.get(node.id))?.nodeLabel || "-"}</div>
+          <div>Parent: {nodes.find((n) => n.id === parentMap.get(node.id))?.label || "-"}</div>
         ) : selectedAlgorithm === "distance-vector" ? (
           <div>
             {distanceVectors.has(id) ? (
@@ -87,7 +87,7 @@ export function Node({
                   ([nodeId, distance]) => (
                     <div key={nodeId}>
                       {
-                        nodes.find((node) => node.id === nodeId)?.nodeLabel
+                        nodes.find((node) => node.id === nodeId)?.label
                       }: {distance[0]}
                     </div>
                   )

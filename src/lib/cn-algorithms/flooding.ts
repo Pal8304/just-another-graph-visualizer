@@ -4,12 +4,13 @@ import { AdjList } from "./utils";
 
 export class Flooding implements GraphAlgorithm {
   Graph: AdjList;
+  nodes: GraphNode[];
+  edges: GraphEdge[];
   sourceNode: GraphNode;
   destinationNode: GraphNode;
   visited: Set<string> = new Set();
   visitedEdges: Set<string> = new Set();
   queue: [node: GraphNode, parent: GraphNode | null, weight: number][] = [];
-  edges: GraphEdge[] = [];
   onEnd: () => void;
   parentMap: Map<string, string> = new Map();
 
@@ -22,11 +23,15 @@ export class Flooding implements GraphAlgorithm {
 
   constructor(
     Graph: AdjList,
+    nodes: GraphNode[],
+    edges: GraphEdge[],
     sourceNode: GraphNode,
     destinationNode: GraphNode,
     onEnd: () => void
   ) {
     this.Graph = Graph;
+    this.nodes = nodes;
+    this.edges = edges;
     this.sourceNode = sourceNode;
     this.destinationNode = destinationNode;
     this.onEnd = onEnd;

@@ -54,7 +54,7 @@ export function AddNodeDialog() {
             onClick={() => {
               setNodeToAdd({
                 id: crypto.randomUUID(),
-                nodeLabel: nodeLabel,
+                label: nodeLabel,
                 x: 0,
                 y: 0,
               });

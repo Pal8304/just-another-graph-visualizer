@@ -2,9 +2,12 @@ import { GraphNode, GraphEdge } from "../stores/graph";
 import { GraphAlgorithm } from "./graph-algorithm";
 import { AdjList } from "./utils";
 import { useGraphStore } from "../stores/graph";
+import { toast } from "sonner";
 
 export class DistanceVector implements GraphAlgorithm {
   Graph: AdjList;
+  nodes: GraphNode[];
+  edges: GraphEdge[];
   sourceNode: GraphNode;
   destinationNode: GraphNode;
   visited: Set<string> = new Set();
@@ -13,7 +16,6 @@ export class DistanceVector implements GraphAlgorithm {
   public distanceVector: Map<string, Map<string, [number, string | null]>> =
     new Map(); // node -> [node -> [distance, nextHop]]
   distanceVectorCreated: boolean = false;
-  edges: GraphEdge[] = [];
   onEnd: () => void;
 
   initialize() {
@@ -29,19 +31,23 @@ export class DistanceVector implements GraphAlgorithm {
 
   constructor(
     Graph: AdjList,
+    nodes: GraphNode[],
+    edges: GraphEdge[],
     sourceNode: GraphNode,
     destinationNode: GraphNode,
     onEnd: () => void
   ) {
     this.Graph = Graph;
+    this.nodes = nodes;
+    this.edges = edges;
     this.sourceNode = sourceNode;
     this.destinationNode = destinationNode;
     this.distanceVectorCreated = false;
     this.distanceVector = new Map();
-    const nodes = Array.from(this.Graph.keys());
-    for (const node of nodes) {
+    const nodeIds = Array.from(this.Graph.keys());
+    for (const node of nodeIds) {
       this.distanceVector.set(node, new Map());
-      for (const node2 of nodes) {
+      for (const node2 of nodeIds) {
         this.distanceVector
           .get(node)!
           .set(node2, node === node2 ? [0, null] : [Infinity, null]);
@@ -54,7 +60,7 @@ export class DistanceVector implements GraphAlgorithm {
   nextStep() {
     console.log("Next step dv");
     if (this.queue.length === 0 && !this.distanceVectorCreated) {
-      console.log("Distance Vectors are calculated");
+      toast.success("Distance Vectors are calculated");
       this.distanceVectorCreated = true;
       this.queue.push([{ node: this.sourceNode.id, parent: "" }]);
       this.visitedEdges = new Set();
@@ -113,6 +119,7 @@ export class DistanceVector implements GraphAlgorithm {
           }
         }
       }
+      toast.info("Distance vector updated for node " + this.nodes.find((node) => node.id === currentNode)!.label);
     } else {
       const queueNode = this.queue.shift()![0];
       const currentNode = queueNode.node;

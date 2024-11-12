@@ -39,7 +39,7 @@ export function GraphCanvas() {
           if (action === "add-node") {
             addNode({
               id: nodeToAdd?.id || "",
-              nodeLabel: nodeToAdd?.nodeLabel || "A",
+              label: nodeToAdd?.label || "A",
               x: x,
               y: y,
             });

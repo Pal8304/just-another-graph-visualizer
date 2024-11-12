@@ -44,6 +44,8 @@ export function GraphAlgoComponent() {
       setAlgo(
         new algorithm(
           nodesAndEdgesToAdjList(nodes, edges),
+          nodes,
+          edges,
           source,
           destination,
           () => {
@@ -81,7 +83,7 @@ export function GraphAlgoComponent() {
           <SelectContent>
             {nodes.map((node) => (
               <SelectItem key={node.id} value={node.id}>
-                {node.nodeLabel}
+                {node.label}
               </SelectItem>
             ))}
           </SelectContent>
@@ -98,7 +100,7 @@ export function GraphAlgoComponent() {
           <SelectContent>
             {nodes.map((node) => (
               <SelectItem key={node.id} value={node.id}>
-                {node.nodeLabel}
+                {node.label}
               </SelectItem>
             ))}
           </SelectContent>

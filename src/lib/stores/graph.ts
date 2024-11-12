@@ -3,7 +3,7 @@ import { persist } from "zustand/middleware";
 
 export interface GraphNode {
   id: string;
-  nodeLabel: string;
+  label: string;
   x: number;
   y: number;
 }
