@@ -50,8 +50,8 @@ export function Node({
             cursor: isAlgoRunning
               ? "not-allowed"
               : action === "view"
-              ? "grab"
-              : "default",
+                ? "grab"
+                : "default",
             border: selectedNode?.id === id ? "4px solid green" : "none",
             backgroundColor: visitedNodes.includes(id) ? "green" : "background",
           }}
@@ -78,7 +78,10 @@ export function Node({
       </HoverCardTrigger>
       <HoverCardContent>
         {selectedAlgorithm === "flooding" ? (
-          <div>Parent: {nodes.find((n) => n.id === parentMap.get(node.id))?.label || "-"}</div>
+          <div>
+            Parent:{" "}
+            {nodes.find((n) => n.id === parentMap.get(node.id))?.label || "-"}
+          </div>
         ) : selectedAlgorithm === "distance-vector" ? (
           <div>
             {distanceVectors.has(id) ? (
@@ -86,11 +89,12 @@ export function Node({
                 {Array.from(distanceVectors.get(id)!.entries()).map(
                   ([nodeId, distance]) => (
                     <div key={nodeId}>
-                      {
-                        nodes.find((node) => node.id === nodeId)?.label
-                      }: {distance[0]} via {nodes.find((node) => node.id === distance[1])?.label || "-"}
+                      {nodes.find((node) => node.id === nodeId)?.label}:{" "}
+                      {distance[0]} via{" "}
+                      {nodes.find((node) => node.id === distance[1])?.label ||
+                        "-"}
                     </div>
-                  )
+                  ),
                 )}
               </div>
             ) : (

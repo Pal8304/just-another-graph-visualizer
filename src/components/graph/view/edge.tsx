@@ -33,12 +33,14 @@ export function Edge(props: Props) {
           // props.edge.weight === 1
           //   ? { stroke: "black" }
           //   : { stroke: "black", strokeDasharray: "5,5" }
-          visitedEdges.includes(props.edge.id) ? {
-            stroke: "currentcolor"
-          } : {
-            stroke: "currentcolor",
-            strokeDasharray: "5,5"
-          }
+          visitedEdges.includes(props.edge.id)
+            ? {
+                stroke: "currentcolor",
+              }
+            : {
+                stroke: "currentcolor",
+                strokeDasharray: "5,5",
+              }
         }
         // markerEnd="url(#arrowhead)"
       />

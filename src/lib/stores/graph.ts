@@ -40,7 +40,7 @@ interface Actions {
   updateNodePosition: (id: string, x: number, y: number) => void;
   setAlgoRunning: (running: boolean) => void;
   setVisitedNodes: (visitedNodes: Set<string>) => void;
-  setVisitedEdges: (visitedEdges:Set<string>) => void;
+  setVisitedEdges: (visitedEdges: Set<string>) => void;
 }
 
 export type GraphStore = State & Actions;
@@ -105,7 +105,7 @@ export const useGraphStore = create(
         set(({ nodes, edges }) => ({
           nodes: nodes.filter((n) => n.id !== node.id),
           edges: edges.filter(
-            (edge) => edge.from.id !== node.id && edge.to.id !== node.id
+            (edge) => edge.from.id !== node.id && edge.to.id !== node.id,
           ),
         }));
       },
@@ -115,7 +115,7 @@ export const useGraphStore = create(
       updateNodePosition: (id: string, x: number, y: number) => {
         set(({ nodes, edges }) => ({
           nodes: nodes.map((node) =>
-            node.id === id ? { ...node, x, y } : node
+            node.id === id ? { ...node, x, y } : node,
           ),
           edges: edges.map((edge) => ({
             ...edge,
@@ -131,11 +131,11 @@ export const useGraphStore = create(
         set({ visitedNodes: Array.from(visitedNodes) });
       },
       setVisitedEdges: (visitedEdges: Set<string>) => {
-        set({visitedEdges: Array.from(visitedEdges)});
-      }
+        set({ visitedEdges: Array.from(visitedEdges) });
+      },
     }),
     {
       name: "graph-store",
-    }
-  )
+    },
+  ),
 );

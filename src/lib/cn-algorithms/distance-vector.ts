@@ -35,7 +35,7 @@ export class DistanceVector implements GraphAlgorithm {
     edges: GraphEdge[],
     sourceNode: GraphNode,
     destinationNode: GraphNode,
-    onEnd: () => void
+    onEnd: () => void,
   ) {
     this.Graph = Graph;
     this.nodes = nodes;
@@ -119,7 +119,10 @@ export class DistanceVector implements GraphAlgorithm {
           }
         }
       }
-      toast.info("Distance vector updated for node " + this.nodes.find((node) => node.id === currentNode)!.label);
+      toast.info(
+        "Distance vector updated for node " +
+          this.nodes.find((node) => node.id === currentNode)!.label,
+      );
     } else {
       const queueNode = this.queue.shift()![0];
       const currentNode = queueNode.node;
@@ -144,10 +147,10 @@ export class DistanceVector implements GraphAlgorithm {
         this.visitedEdges.add(
           this.edges.find(
             (edge) =>
-              (edge.from.id === currentNode && edge.to.id === parent) || 
-              (edge.to.id === currentNode && edge.from.id === parent)
-          )!.id
-        )
+              (edge.from.id === currentNode && edge.to.id === parent) ||
+              (edge.to.id === currentNode && edge.from.id === parent),
+          )!.id,
+        );
         this.endAlgorithm();
         return;
       }

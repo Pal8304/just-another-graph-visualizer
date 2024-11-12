@@ -24,7 +24,8 @@ import { DistanceVector } from "@/lib/cn-algorithms/distance-vector";
 import { SkipForwardIcon } from "lucide-react";
 
 export function GraphAlgoComponent() {
-  const { isAlgoRunning, setAlgoRunning, setVisitedNodes, setVisitedEdges } = useGraphStore();
+  const { isAlgoRunning, setAlgoRunning, setVisitedNodes, setVisitedEdges } =
+    useGraphStore();
   const {
     algorithm,
     selectedAlgorithm,
@@ -53,8 +54,8 @@ export function GraphAlgoComponent() {
           () => {
             setAlgoRunning(false);
             toast.success("Algorithm has finished running");
-          }
-        )
+          },
+        ),
       );
     }
   }, [
@@ -151,20 +152,21 @@ export function GraphAlgoComponent() {
         >
           <ArrowRightIcon className="w-6 h-6" />
         </Button>
-        { (algo instanceof DistanceVector && isAlgoRunning) &&
-        <Button
-          variant={"ghost"}
-          size="icon"
-          className="w-12 h-12"
-          onClick={() => {
-            assert(algo instanceof DistanceVector);
-            algo.calculateAllDistanceVectors();
-            setVisitedNodes(algo?.getVisitedNodes() || new Set());
-            setVisitedEdges(algo?.getVisitedEdges() || new Set());
-          }}
-        >
-          <SkipForwardIcon className="w-6 h-6" />
-        </Button>}
+        {algo instanceof DistanceVector && isAlgoRunning && (
+          <Button
+            variant={"ghost"}
+            size="icon"
+            className="w-12 h-12"
+            onClick={() => {
+              assert(algo instanceof DistanceVector);
+              algo.calculateAllDistanceVectors();
+              setVisitedNodes(algo?.getVisitedNodes() || new Set());
+              setVisitedEdges(algo?.getVisitedEdges() || new Set());
+            }}
+          >
+            <SkipForwardIcon className="w-6 h-6" />
+          </Button>
+        )}
       </div>
     </div>
   );
