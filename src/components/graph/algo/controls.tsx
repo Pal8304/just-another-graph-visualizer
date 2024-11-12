@@ -3,11 +3,7 @@
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useGraphStore } from "@/lib/stores/graph";
-import {
-  ArrowRightIcon,
-  PlayIcon,
-  StopIcon,
-} from "@radix-ui/react-icons";
+import { ArrowRightIcon, PlayIcon, StopIcon } from "@radix-ui/react-icons";
 import { useAlgorithmStore } from "@/lib/stores/algorithm";
 import { nodesAndEdgesToAdjList } from "@/lib/cn-algorithms/utils";
 import {
@@ -42,7 +38,7 @@ export function GraphAlgoComponent() {
     if (!algorithm && selectedAlgorithm) {
       setAlgorithm(selectedAlgorithm);
     }
-    if (algorithm && source && destination) {
+    if (algorithm && source && destination && isAlgoRunning) {
       setAlgo(
         new algorithm(
           nodesAndEdgesToAdjList(nodes, edges),
@@ -130,7 +126,7 @@ export function GraphAlgoComponent() {
             }
             setAlgoRunning(!isAlgoRunning);
           }}
-          disabled={!algo || !source || !destination}
+          disabled={!source || !destination}
         >
           {!isAlgoRunning ? (
             <PlayIcon className="w-6 h-6" />
