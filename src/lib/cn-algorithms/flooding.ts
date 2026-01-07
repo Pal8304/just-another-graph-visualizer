@@ -27,7 +27,7 @@ export class Flooding implements GraphAlgorithm {
     edges: GraphEdge[],
     sourceNode: GraphNode,
     destinationNode: GraphNode,
-    onEnd: () => void,
+    onEnd: () => void
   ) {
     this.Graph = Graph;
     this.nodes = nodes;
@@ -47,20 +47,19 @@ export class Flooding implements GraphAlgorithm {
     if (node.id === this.destinationNode.id) {
       console.log("Found destination node");
       this.visited.add(node.id);
-      console.log(node, parent);
       this.visitedEdges.add(
         this.edges.find(
           (edge) =>
             (edge.from.id === node.id && edge.to.id === parent?.id) ||
-            (edge.from.id === parent?.id && edge.to.id === node.id),
-        )!.id,
+            (edge.from.id === parent?.id && edge.to.id === node.id)
+        )!.id
       );
       this.endAlgorithm();
       return;
     }
     const edge = this.edges.find((edge) => {
       if (edge.directed) {
-        return edge.from.id === node.id && edge.to.id === parent?.id;
+        return edge.from.id === parent?.id && edge.to.id === node.id;
       } else {
         return (
           (edge.from.id === node.id && edge.to.id === parent?.id) ||

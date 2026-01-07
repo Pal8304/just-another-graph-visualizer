@@ -50,8 +50,8 @@ export function Node({
             cursor: isAlgoRunning
               ? "not-allowed"
               : action === "view"
-                ? "grab"
-                : "default",
+              ? "grab"
+              : "default",
             border: selectedNode?.id === id ? "4px solid green" : "none",
             backgroundColor: visitedNodes.includes(id) ? "green" : "background",
           }}
@@ -94,7 +94,7 @@ export function Node({
                       {nodes.find((node) => node.id === distance[1])?.label ||
                         "-"}
                     </div>
-                  ),
+                  )
                 )}
               </div>
             ) : (

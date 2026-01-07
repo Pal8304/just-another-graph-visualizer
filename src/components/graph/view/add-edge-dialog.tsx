@@ -52,6 +52,7 @@ export function AddEdgeDialog() {
             <Label className="text-right">Directed</Label>
             <Checkbox
               id="directed"
+              checked={directed}
               onCheckedChange={(checked: boolean | "indeterminate") =>
                 setDirected(checked === true)
               }

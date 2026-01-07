@@ -1,9 +1,6 @@
 import { GraphEdge, GraphNode } from "../stores/graph";
 export type AdjList = Map<string, Array<[GraphNode, number]>>;
 
-// export function adjListToNodesAndEdges(adjList: AdjList): [GraphNode[], GraphEdge[]] {
-// }
-
 export function nodesAndEdgesToAdjList(
   nodes: GraphNode[],
   edges: GraphEdge[],

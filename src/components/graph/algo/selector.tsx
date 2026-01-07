@@ -11,12 +11,10 @@ import { AlgorithmStore, useAlgorithmStore } from "@/lib/stores/algorithm";
 
 export function GraphAlgoSelector() {
   const { setAlgorithm, selectedAlgorithm } = useAlgorithmStore();
-  console.log(selectedAlgorithm);
   return (
     <div>
       <Select
-        onValueChange={(value: AlgorithmStore["selectedAlgorithm"]) => {
-          console.log("changing value", value);
+        onValueChange={(value: AlgorithmStore["selectedAlgorithm"]) => { 
           setAlgorithm(value);
         }}
         value={selectedAlgorithm}
